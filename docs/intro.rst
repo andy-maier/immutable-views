@@ -197,9 +197,9 @@ can be installed.
 
   .. code-block:: bash
 
-      $ pip install git+https://github.com/zhmcclient/immutable-views.git@master#egg=immutable-views
+      $ pip install git+https://github.com/andy-maier/immutable-views.git@master#egg=immutable-views
 
-.. _immutable-views repository: https://github.com/zhmcclient/immutable-views
+.. _immutable-views repository: https://github.com/andy-maier/immutable-views
 
 .. _PyPI: https://pypi.python.org/pypi
 

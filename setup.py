@@ -85,10 +85,10 @@ setuptools.setup(
     author_email='andreas.r.maier@gmx.de',
     maintainer="Andreas Maier",
     maintainer_email='andreas.r.maier@gmx.de',
-    url='https://github.com/zhmcclient/immutable-views',
+    url='https://github.com/andy-maier/immutable-views',
     project_urls={
         'Bug Tracker':
-        'https://github.com/zhmcclient/immutable-views/issues',
+        'https://github.com/andy-maier/immutable-views/issues',
         'Documentation':
         'https://immutable-views.readthedocs.io/en/stable/',
         'Change Log':
