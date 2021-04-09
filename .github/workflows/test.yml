@@ -196,11 +196,6 @@ jobs:
         PACKAGE_LEVEL: ${{ matrix.package_level }}
       run: |
         make installtest
-    - name: Run testdict
-      env:
-        PACKAGE_LEVEL: ${{ matrix.package_level }}
-      run: |
-        make testdict
 
   test_finish:
     needs: test

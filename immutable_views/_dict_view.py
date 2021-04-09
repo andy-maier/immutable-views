@@ -6,10 +6,10 @@ from __future__ import print_function, absolute_import
 
 import os
 try:
-    from collections.abc import Mapping, KeysView, ValuesView, ItemsView
+    from collections.abc import Mapping
 except ImportError:
     # Python 2
-    from collections import Mapping, KeysView, ValuesView, ItemsView
+    from collections import Mapping
 import six
 
 __all__ = ['DictView']
@@ -253,48 +253,75 @@ class DictView(Mapping):
 
     def __eq__(self, other):
         """
-        Return a boolean indicating whether the original dictionary and the
-        other dictionary are equal.
+        Return a boolean indicating whether the original dictionary is
+        equal to
+        the other dictionary (or in case of a DictView, its original
+        dictionary).
         """
-        if isinstance(other, DictView):
-            other_dict = other._dict
-        else:
-            other_dict = other
+        # pylint: disable=protected-access
+        other_dict = other._dict if isinstance(other, DictView) else other
         return self._dict == other_dict
 
     def __ne__(self, other):
         """
-        Return a boolean indicating whether the original dictionary and the
-        other dictionary are not equal.
+        Return a boolean indicating whether the original dictionary is
+        not equal to
+        the other dictionary (or in case of a DictView, its original
+        dictionary).
         """
-        return not self.__eq__(other)
-
-    def _raise_ordering_not_supported(self, other, op):
-        """
-        Function to raise a TypeError indicating that ordering of this class
-        is not supported.
-        """
-        raise TypeError(
-            "'{}' not supported between instances of '{}' and '{}'".
-            format(op, type(self), type(other)))
+        # pylint: disable=protected-access
+        other_dict = other._dict if isinstance(other, DictView) else other
+        return self._dict != other_dict
 
     def __lt__(self, other):
-        self._raise_ordering_not_supported(other, '<')
+        """
+        Return a boolean indicating whether the original dictionary is
+        less than
+        the other dictionary (or in case of a DictView, its original
+        dictionary).
+        """
+        # pylint: disable=protected-access
+        other_dict = other._dict if isinstance(other, DictView) else other
+        return self._dict < other_dict
 
     def __gt__(self, other):
-        self._raise_ordering_not_supported(other, '>')
+        """
+        Return a boolean indicating whether the original dictionary is
+        greater than
+        the other dictionary (or in case of a DictView, its original
+        dictionary).
+        """
+        # pylint: disable=protected-access
+        other_dict = other._dict if isinstance(other, DictView) else other
+        return self._dict > other_dict
 
     def __ge__(self, other):
-        self._raise_ordering_not_supported(other, '>=')
+        """
+        Return a boolean indicating whether the original dictionary is
+        greater than or equal to
+        the other dictionary (or in case of a DictView, its original
+        dictionary).
+        """
+        # pylint: disable=protected-access
+        other_dict = other._dict if isinstance(other, DictView) else other
+        return self._dict >= other_dict
 
     def __le__(self, other):
-        self._raise_ordering_not_supported(other, '<=')
+        """
+        Return a boolean indicating whether the original dictionary is
+        less than or equal to
+        the other dictionary (or in case of a DictView, its original
+        dictionary).
+        """
+        # pylint: disable=protected-access
+        other_dict = other._dict if isinstance(other, DictView) else other
+        return self._dict <= other_dict
 
 
 # Remove methods that should only be present in a particular Python version
 # If the documentation is built, the methods are not removed in order to show
 # them in the documentation.
-if six.PY2 and not BUILDING_DOCS:
+if not six.PY2 and not BUILDING_DOCS:
     del DictView.has_key
     del DictView.iterkeys
     del DictView.itervalues
