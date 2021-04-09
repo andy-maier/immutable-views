@@ -5,7 +5,6 @@ Test the DictView class.
 from __future__ import absolute_import
 
 import sys
-import os
 import re
 from collections import OrderedDict
 try:
@@ -101,7 +100,7 @@ TESTCASES_DICTVIEW_INIT = [
             exp_dict=DictView({'Dog': 'Cat', 'Budgie': 'Fish'}),
             verify_order=False,
         ),
-        None, UserWarning if DICT_WARNS_ORDER else None, True
+        None, None, True
     ),
 
     # Error cases with inputs that are invalid for the view but would be valid
