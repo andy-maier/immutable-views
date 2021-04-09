@@ -1,0 +1,45 @@
+# Pip requirements file for development.
+#
+# The order of packages is significant, because pip processes them in the order
+# of appearance.
+#
+# Make sure that the minimum versions required in this file are consistent with
+# the minimum versions specified in minimum-constraints.txt.
+
+
+# Unit test direct dependencies (e.g. imports into testcases):
+
+# pytest
+# pytest 5.0.0 has removed support for Python < 3.5
+# pytest 4.3.1 solves an issue on Python 3 with minimum package levels
+# pytest 6.0.0 causes pylint to report "not-callable" issues
+pytest>=4.3.1,<5.0.0; python_version < '3.5'
+pytest>=4.3.1,!=6.0.0; python_version >= '3.5' and python_version <= '3.6'
+pytest>=4.4.0,!=6.0.0; python_version >= '3.7'
+
+
+# Install test direct dependencies:
+
+# virtualenv
+# Virtualenv 20.0.19 has an issue where it does not install pip on Python 3.4.
+# Virtualenv 20.0.32 has an issue where it raises AttributeError on Python 3.4.
+virtualenv>=14.0.0,!=20.0.19,!=20.0.32; python_version < '3.5'
+virtualenv>=16.1.0; python_version >= '3.5' and python_version < '3.8'
+virtualenv>=20.0.0; python_version >= '3.8'
+
+
+# Indirect dependencies with special constraints:
+
+# packaging (used by pytest)
+packaging>=17.0
+
+# pluggy (used by pytest)
+# Pluggy 0.12.0 has a bug causing pytest plugins to fail loading on py38
+pluggy>=0.7.1; python_version >= '2.7' and python_version <= '3.6'
+pluggy>=0.13.0; python_version >= '3.7'
+
+# pathlib2 (used by virtualenv on py<3.4 on non-Windows)
+pathlib2<3,>=2.3.3; python_version < '3.4' and sys_platform != 'win32'
+
+
+# Additional indirect dependencies are not specified in this file.
