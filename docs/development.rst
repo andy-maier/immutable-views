@@ -16,7 +16,7 @@ Repository
 
 The repository for the immutable-views project is on GitHub:
 
-https://github.com/zhmcclient/immutable-views
+https://github.com/andy-maier/immutable-views
 
 
 .. _`Setting up the development environment`:
@@ -29,7 +29,7 @@ Setting up the development environment
 
    .. code-block:: bash
 
-        $ git clone git@github.com:zhmcclient/immutable-views.git
+        $ git clone git@github.com:andy-maier/immutable-views.git
         $ cd immutable-views
 
    If you do not have write access, create a fork on GitHub and clone the
@@ -309,12 +309,12 @@ It covers all variants of versions that can be released:
 * Releasing a new update version (M.N.Unew) based on the stable branch of its
   minor version
 
-The description assumes that the `zhmcclient/immutable-views`
+The description assumes that the `andy-maier/immutable-views`
 Github repo is cloned locally and its upstream repo is assumed to have the Git
 remote name `origin`.
 
 Any commands in the following steps are executed in the main directory of your
-local clone of the `zhmcclient/immutable-views`
+local clone of the `andy-maier/immutable-views`
 Git repo.
 
 1.  Set shell variables for the version that is being released and the branch
@@ -497,12 +497,12 @@ This section covers all variants of new versions:
 * Starting a new update version (M.N.Unew) based on the stable branch of its
   minor version
 
-The description assumes that the `zhmcclient/immutable-views`
+The description assumes that the `andy-maier/immutable-views`
 Github repo is cloned locally and its upstream repo is assumed to have the Git
 remote name `origin`.
 
 Any commands in the following steps are executed in the main directory of your
-local clone of the `zhmcclient/immutable-views`
+local clone of the `andy-maier/immutable-views`
 Git repo.
 
 1.  Set shell variables for the version that is being started and the branch it
@@ -590,7 +590,7 @@ Git repo.
 
         * See `list of open issues`_.
 
-        .. _`list of open issues`: https://github.com/zhmcclient/immutable-views/issues
+        .. _`list of open issues`: https://github.com/andy-maier/immutable-views/issues
 
 5.  Commit your changes and push them to the remote repo:
 

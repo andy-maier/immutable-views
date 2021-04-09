@@ -5,16 +5,16 @@ immutable-views - Immutable views on other collection objects
     :target: https://pypi.python.org/pypi/immutable-views/
     :alt: Version on Pypi
 
-.. image:: https://github.com/zhmcclient/immutable-views/workflows/test/badge.svg?branch=master
-    :target: https://github.com/zhmcclient/immutable-views/actions/
+.. image:: https://github.com/andy-maier/immutable-views/workflows/test/badge.svg?branch=master
+    :target: https://github.com/andy-maier/immutable-views/actions/
     :alt: Actions status
 
 .. image:: https://readthedocs.org/projects/immutable-views/badge/?version=latest
     :target: https://readthedocs.org/projects/immutable-views/builds/
     :alt: Docs build status (master)
 
-.. image:: https://coveralls.io/repos/github/zhmcclient/immutable-views/badge.svg?branch=master
-    :target: https://coveralls.io/github/zhmcclient/immutable-views?branch=master
+.. image:: https://coveralls.io/repos/github/andy-maier/immutable-views/badge.svg?branch=master
+    :target: https://coveralls.io/github/andy-maier/immutable-views?branch=master
     :alt: Test coverage (master)
 
 
@@ -24,9 +24,12 @@ Overview
 The **immutable-views** package provides collection classes that are immutable
 views on other (mutable) collection objects:
 
-* :class:`immutable_views.DictView` - immutable view on another mapping object.
-* :class:`immutable_views.ListView` - immutable view on another list (sequence) object.
-* :class:`immutable_views.SetView` - immutable view on another set object.
+* `immutable_views.DictView <https://immutable-views.readthedocs.io/en/latest/api.html#immutable_views.DictView>`_ -
+  immutable view on another mapping object.
+* `immutable_views.ListView <https://immutable-views.readthedocs.io/en/latest/api.html#immutable_views.ListView>`_ -
+  immutable view on another list (sequence) object.
+* `immutable_views.SetView <https://immutable-views.readthedocs.io/en/latest/api.html#immutable_views.SetView>`_ -
+  immutable view on another set object.
 
 An important behavior of views is that they are "live": Since the view
 classes delegate to the original collection, any modification of the original
@@ -156,7 +159,7 @@ License
 -------
 
 The **immutable-views** project is provided under the
-`Apache Software License 2.0 <https://raw.githubusercontent.com/zhmcclient/immutable-views/master/LICENSE>`_.
+`Apache Software License 2.0 <https://raw.githubusercontent.com/andy-maier/immutable-views/master/LICENSE>`_.
 
 
 .. # Links:
