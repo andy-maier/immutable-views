@@ -24,6 +24,18 @@ DictView class
     :special-members: __str__
 
 
+.. _`ListView class`:
+
+ListView class
+--------------
+
+.. autoclass:: immutable_views.ListView
+    :members:
+    :autosummary:
+    :autosummary-inherited-members:
+    :special-members: __str__
+
+
 .. _`Package version`:
 
 Package version

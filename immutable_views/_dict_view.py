@@ -255,14 +255,6 @@ class DictView(Mapping):
         new_dict = org_class(self._dict)
         return DictView(new_dict)
 
-    def __hash__(self):
-        """
-        Return a hash value for the original dictionary.
-
-        This will raise an exception if the original dictionary is not hashable.
-        """
-        return self._dict.__hash__()
-
     def __eq__(self, other):
         """
         Return a boolean indicating whether the original dictionary is
