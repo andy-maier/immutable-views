@@ -1688,23 +1688,30 @@ def test_ListView_copy(testcase, listview):
     # The code to be tested
     listview_copy = listview.copy()
 
+    listview_copy_list = listview_copy._list  # pylint: disable=protected-access
+
     # Ensure that exceptions raised in the remainder of this function
     # are not mistaken as expected exceptions
     assert testcase.exp_exc_types is None
 
+    # Verify the result type
+    # pylint: disable=unidiomatic-typecheck
+    assert type(listview_copy) is ListView
+
     # Verify the result is a different object than the ListView
     assert id(listview_copy) != id(listview)
 
-    # Verify the result is a different object than the original list, if mutable
+    # Verify the new list is a different object than the original list,
+    # if mutable
     if isinstance(listview_list, MutableSequence):
-        assert id(listview_copy) != id(listview_list)
+        assert id(listview_copy_list) != id(listview_list)
 
-    # Verify the result has the same type as the original list
+    # Verify the new list has the same type as the original list
     # pylint: disable=unidiomatic-typecheck
-    assert type(listview_copy) == type(listview_list)
+    assert type(listview_copy_list) == type(listview_list)
 
-    # Verify the result is equal to the original list
-    assert listview_copy == listview_list
+    # Verify the new list is equal to the original list
+    assert listview_copy_list == listview_list
 
 
 def test_ListView_clear():

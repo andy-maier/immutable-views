@@ -47,9 +47,6 @@ class DictView(Mapping):
     # * __getattribute__(self, name): The method inherited from object is used;
     #   no reason to have a different implementation.
 
-    # TODO:
-    # __sizeof__(self): TBD
-
     def __init__(self, a_dict):
         """
         Parameters:
@@ -246,11 +243,17 @@ class DictView(Mapping):
 
     def copy(self):
         """
-        Return an object of the type of the original dictionary that is a
-        shallow copy of the original dictionary.
+        Return a new DictView object that is a view on a new dictionary that
+        is a shallow copy of the original dictionary.
+
+        Note: If the original dictionary is immutable, the new dictionary may
+        be the original dictionary object.
+        If the original dictionary is mutable, the new dictionary is always a
+        different object than the original dictionary.
         """
         org_class = self._dict.__class__
-        return org_class(self._dict)
+        new_dict = org_class(self._dict)
+        return DictView(new_dict)
 
     def __hash__(self):
         """
