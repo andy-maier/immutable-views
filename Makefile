@@ -530,7 +530,7 @@ pylint_$(python_mn_version).done: develop_reqs_$(python_mn_version).done Makefil
 ifeq ($(python_m_version),2)
 	@echo "makefile: Warning: Skipping Pylint on Python $(python_version)" >&2
 else
-ifeq ($(python_mn_version),3.4)
+ifeq ($(python_mn_version),py34)
 	@echo "makefile: Warning: Skipping Pylint on Python $(python_version)" >&2
 else
 	@echo "Makefile: Running Pylint"
