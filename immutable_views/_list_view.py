@@ -57,9 +57,6 @@ class ListView(Sequence):
     # * __getattribute__(self, name): The method inherited from object is used;
     #   no reason to have a different implementation.
 
-    # TODO:
-    # __sizeof__(self): TBD
-
     def __init__(self, a_list):
         """
         Parameters:
@@ -224,16 +221,17 @@ class ListView(Sequence):
 
     def copy(self):
         """
-        Return an object of the type of the original list that is a
-        shallow copy of the original list.
+        Return a new ListView object that is a view on a new list that
+        is a shallow copy of the original list.
 
-        Note: If the original list is immutable, the returned object may the
-        the original list object; this is the case e.g. for an empty tuple.
-        If the original list is mutable, the returned object is always a
-        different object than the original list.
+        Note: If the original list is immutable, the new list may be the
+        original list object; this is the case e.g. for an empty tuple.
+        If the original list is mutable, the new list is always a different
+        object than the original list.
         """
         org_class = self._list.__class__
-        return org_class(self._list)
+        new_list = org_class(self._list)  # May be same object if immutable
+        return ListView(new_list)
 
     def index(self, value, start=0, stop=9223372036854775807):
         """

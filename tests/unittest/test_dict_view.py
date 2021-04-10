@@ -8,9 +8,11 @@ import sys
 import re
 from collections import OrderedDict
 try:
-    from collections.abc import KeysView, ValuesView, ItemsView, Iterator
+    from collections.abc import KeysView, ValuesView, ItemsView, Iterator, \
+        MutableMapping
 except ImportError:
-    from collections import KeysView, ValuesView, ItemsView, Iterator
+    from collections import KeysView, ValuesView, ItemsView, Iterator, \
+        MutableMapping
 import pytest
 
 from ..utils.simplified_test_function import simplified_test_function
@@ -1373,28 +1375,31 @@ TESTCASES_DICTVIEW_COPY = [
     # Each list item is a testcase tuple with these items:
     # * desc: Short testcase description.
     # * kwargs: Keyword arguments for the test function:
-    #   * obj: DictView object to be used for the test.
-    #   * test_key: Key for testing that copy is a copy, or None to skip.
-    #   * test_value: Value for testing that copy is a copy.
+    #   * dictview: DictView object to be used for the test.
     # * exp_exc_types: Expected exception type(s), or None.
     # * exp_warn_types: Expected warning type(s), or None.
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
     (
-        "Empty dict",
+        "DictView with empty dict",
         dict(
-            obj=DictView({}),
-            test_key=None,
-            test_value=None,
+            dictview=DictView({}),
         ),
         None, None, True
     ),
     (
-        "Dict with two items",
+        "DictView with dict with two items",
         dict(
-            obj=DictView(OrderedDict([('Dog', 'Cat'), ('Budgie', 'Fish')])),
-            test_key='Dog',
-            test_value='Kitten',
+            dictview=DictView(
+                dict([('Dog', 'Cat'), ('Budgie', 'Fish')])),
+        ),
+        None, None, True
+    ),
+    (
+        "DictView with OrderedDict with two items",
+        dict(
+            dictview=DictView(
+                OrderedDict([('Dog', 'Cat'), ('Budgie', 'Fish')])),
         ),
         None, None, True
     ),
@@ -1405,29 +1410,40 @@ TESTCASES_DICTVIEW_COPY = [
     "desc, kwargs, exp_exc_types, exp_warn_types, condition",
     TESTCASES_DICTVIEW_COPY)
 @simplified_test_function
-def test_DictView_copy(testcase, obj, test_key, test_value):
+def test_DictView_copy(testcase, dictview):
     """
     Test function for DictView.copy()
     """
 
+    dictview_dict = dictview._dict  # pylint: disable=protected-access
+
     # The code to be tested
-    obj_copy = obj.copy()
+    dictview_copy = dictview.copy()
+
+    dictview_copy_dict = dictview_copy._dict  # pylint: disable=protected-access
 
     # Ensure that exceptions raised in the remainder of this function
     # are not mistaken as expected exceptions
     assert testcase.exp_exc_types is None
 
-    # The verification below also uses some DictView features, but that is
-    # unavoidable if we want to work through the public interface:
+    # Verify the result type
+    # pylint: disable=unidiomatic-typecheck
+    assert type(dictview_copy) is DictView
 
-    assert obj_copy == obj  # Uses DictView equality
+    # Verify the result is a different object than the DictView
+    assert id(dictview_copy) != id(dictview)
 
-    # Verify that the copy is a copy
-    if test_key is not None:
-        org_value = obj[test_key]  # Uses DictView get
-        obj_copy[test_key] = test_value  # Uses DictView set
-        now_value = obj[test_key]  # Uses DictView get
-        assert now_value == org_value
+    # Verify the new dictionary is a different object than the original
+    # dictionary, if mutable
+    if isinstance(dictview_dict, MutableMapping):
+        assert id(dictview_copy_dict) != id(dictview_dict)
+
+    # Verify the new dictionary has the same type as the original dictionary
+    # pylint: disable=unidiomatic-typecheck
+    assert type(dictview_copy_dict) == type(dictview_dict)
+
+    # Verify the new dictionary is equal to the original dictionary
+    assert dictview_copy_dict == dictview_dict
 
 
 TESTCASES_DICTVIEW_EQUAL = [
