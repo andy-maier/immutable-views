@@ -42,6 +42,14 @@ class DictView(Mapping):
     modified through the view.
     """
 
+    # Methods not implemented:
+    #
+    # * __getattribute__(self, name): The method inherited from object is used;
+    #   no reason to have a different implementation.
+
+    # TODO:
+    # __sizeof__(self): TBD
+
     def __init__(self, a_dict):
         """
         Parameters:
@@ -54,6 +62,16 @@ class DictView(Mapping):
                 "The a_dict parameter must be a Mapping, but is: {}".
                 format(type(a_dict)))
         self._dict = a_dict
+
+    def __repr__(self):
+        """
+        Return a string representation of the original dictionary that is
+        suitable for debugging.
+        """
+        items = ["{0!r}: {1!r}".format(key, value)
+                 for key, value in six.iteritems(self)]
+        items_str = ', '.join(items)
+        return "{0.__class__.__name__}({{{1}}})".format(self, items_str)
 
     def __getitem__(self, key):
         """
@@ -226,19 +244,10 @@ class DictView(Mapping):
 
     # Other stuff
 
-    def __repr__(self):
-        """
-        Return a string representation of the original dictionary that is
-        suitable for debugging.
-        """
-        items = ["{0!r}: {1!r}".format(key, value)
-                 for key, value in six.iteritems(self)]
-        items_str = ', '.join(items)
-        return "{0.__class__.__name__}({{{1}}})".format(self, items_str)
-
     def copy(self):
         """
-        Return a shallow copy of the original dictionary.
+        Return an object of the type of the original dictionary that is a
+        shallow copy of the original dictionary.
         """
         org_class = self._dict.__class__
         return org_class(self._dict)
