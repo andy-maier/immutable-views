@@ -4,7 +4,6 @@ An immutable set view.
 
 from __future__ import print_function, absolute_import
 
-import sys
 try:
     from collections.abc import Set
 except ImportError:
@@ -12,12 +11,6 @@ except ImportError:
     from collections import Set
 
 __all__ = ['SetView']
-
-if sys.version_info[0] == 2:
-    # pylint: disable=undefined-variable
-    _INTEGER_TYPES = (long, int)  # noqa: F821
-else:
-    _INTEGER_TYPES = (int,)
 
 
 class SetView(Set):
@@ -58,11 +51,14 @@ class SetView(Set):
 
           a_set (:class:`~py3:collections.abc.Set`):
             The original set.
+            If this object is a SetView, its original set is used.
         """
         if not isinstance(a_set, Set):
             raise TypeError(
                 "The a_set parameter must be a Set, but is: {}".
                 format(type(a_set)))
+        if isinstance(a_set, SetView):
+            a_set = a_set._set
         self._set = a_set
 
     def __repr__(self):
@@ -167,62 +163,7 @@ class SetView(Set):
         # pylint: disable=protected-access
         other_sets = [other._set if isinstance(other, SetView) else other
                       for other in others]
-        new_set = self._set.intersection(other_sets)
-        return SetView(new_set)
-
-    def __sub__(self, other):
-        """
-        ``self - other``:
-        Return a new view on the difference of the set and the other set.
-
-        The returned :class:`SetView` object is a view on a new set object of
-        the type of the left hand operand that contains the items that are in
-        the original set of the left hand operand but not in the other set
-        (or in case of a SetView, its original set).
-
-        The other object must be a :class:`set` or :class:`SetView`.
-
-        The set and the other set are not changed.
-
-        Raises:
-          TypeError: The other object is not a set or SetView.
-        """
-        # pylint: disable=protected-access
-        other_set = other._set if isinstance(other, SetView) else other
-        new_set = self._set - other_set
-        return SetView(new_set)
-
-    def __rsub__(self, other):
-        """
-        ``other - self``: Not implemented; the other set will need to implement
-        :meth:`~py3:object.__sub__()`.
-
-        Raises:
-          NotImplementedError
-        """
-        raise NotImplementedError
-
-    def difference(self, *others):
-        """
-        Return a new view on the difference of the set and the other
-        iterables.
-
-        The returned :class:`SetView` object is a view on a new set object of
-        the type of the original set that contains the items that are in the
-        original set but not in any of the other iterables (or in case of
-        SetView objects, their original sets).
-
-        The other objects must be :term:`iterables <py3:iterable>`.
-
-        The set and the other iterables are not changed.
-
-        Raises:
-          TypeError: The other objects are not all iterables.
-        """
-        # pylint: disable=protected-access
-        other_sets = [other._set if isinstance(other, SetView) else other
-                      for other in others]
-        new_set = self._set.difference(other_sets)
+        new_set = self._set.intersection(*other_sets)
         return SetView(new_set)
 
     def __or__(self, other):
@@ -288,7 +229,80 @@ class SetView(Set):
         # pylint: disable=protected-access
         other_sets = [other._set if isinstance(other, SetView) else other
                       for other in others]
-        new_set = self._set.difference(other_sets)
+        new_set = self._set.union(*other_sets)
+        return SetView(new_set)
+
+    def __sub__(self, other):
+        """
+        ``self - other``:
+        Return a new view on the difference of the set and the other set.
+
+        The returned :class:`SetView` object is a view on a new set object of
+        the type of the left hand operand that contains the items that are in
+        the original set of the left hand operand but not in the other set
+        (or in case of a SetView, its original set).
+
+        The other object must be a :class:`set` or :class:`SetView`.
+
+        The set and the other set are not changed.
+
+        Raises:
+          TypeError: The other object is not a set or SetView.
+        """
+        # pylint: disable=protected-access
+        other_set = other._set if isinstance(other, SetView) else other
+        new_set = self._set - other_set
+        return SetView(new_set)
+
+    def __rsub__(self, other):
+        """
+        ``other - self``:
+        Return a new view on the difference of the other set and the set.
+
+        This method is a fallback and is called only if the left operand does
+        not support the operation.
+
+        The returned :class:`SetView` object is a view on a new set object of
+        the type of the left hand operand that contains the items that are in
+        the other set (or in case of a SetView, its original set) but not in
+        the original set of the left hand operand.
+
+        The other object must be a :class:`set` or :class:`SetView`.
+
+        The set and the other set are not changed.
+
+        Raises:
+          TypeError: The other object is not a set or SetView.
+        """
+        # pylint: disable=protected-access
+        other_set = other._set if isinstance(other, SetView) else other
+        new_set = set()
+        for item in other_set:
+            if item not in self._set:
+                new_set.add(item)
+        return SetView(new_set)
+
+    def difference(self, *others):
+        """
+        Return a new view on the difference of the set and the other
+        iterables.
+
+        The returned :class:`SetView` object is a view on a new set object of
+        the type of the original set that contains the items that are in the
+        original set but not in any of the other iterables (or in case of
+        SetView objects, their original sets).
+
+        The other objects must be :term:`iterables <py3:iterable>`.
+
+        The set and the other iterables are not changed.
+
+        Raises:
+          TypeError: The other objects are not all iterables.
+        """
+        # pylint: disable=protected-access
+        other_sets = [other._set if isinstance(other, SetView) else other
+                      for other in others]
+        new_set = self._set.difference(*other_sets)
         return SetView(new_set)
 
     def __xor__(self, other):
