@@ -495,7 +495,7 @@ def test_ListView_setitem():
 
     with pytest.raises(TypeError) as exc_info:
         # The code to be tested
-        listview[0] = 'b'
+        listview[0] = 'b'  # pylint: disable=unsupported-assignment-operation
 
     exc_msg = str(exc_info.value)
     assert re.search(r"does not support item assignment", exc_msg)
@@ -509,7 +509,7 @@ def test_ListView_delitem():
 
     with pytest.raises(TypeError) as exc_info:
         # The code to be tested
-        del listview[0]
+        del listview[0]  # pylint: disable=unsupported-delete-operation
 
     exc_msg = str(exc_info.value)
     assert re.search(r"doesn't support item deletion", exc_msg)
@@ -1267,7 +1267,7 @@ def test_ListView_reverse():
 
     with pytest.raises(AttributeError):
         # The code to be tested
-        listview.reverse()
+        listview.reverse()  # pylint: disable=no-member
 
 
 TESTCASES_LISTVIEW_COMPARE = [
@@ -1722,7 +1722,7 @@ def test_ListView_clear():
 
     with pytest.raises(AttributeError):
         # The code to be tested
-        listview.clear()
+        listview.clear()  # pylint: disable=no-member
 
 
 TESTCASES_LISTVIEW_INDEX = [
@@ -1844,7 +1844,7 @@ def test_ListView_append():
 
     with pytest.raises(AttributeError):
         # The code to be tested
-        listview.append('b')
+        listview.append('b')  # pylint: disable=no-member
 
 
 def test_ListView_extend():
@@ -1855,7 +1855,7 @@ def test_ListView_extend():
 
     with pytest.raises(AttributeError):
         # The code to be tested
-        listview.extend(['b'])
+        listview.extend(['b'])  # pylint: disable=no-member
 
 
 def test_ListView_insert():
@@ -1866,7 +1866,7 @@ def test_ListView_insert():
 
     with pytest.raises(AttributeError):
         # The code to be tested
-        listview.insert(0, 'b')
+        listview.insert(0, 'b')  # pylint: disable=no-member
 
 
 def test_ListView_pop():
@@ -1877,7 +1877,7 @@ def test_ListView_pop():
 
     with pytest.raises(AttributeError):
         # The code to be tested
-        listview.pop()
+        listview.pop()  # pylint: disable=no-member
 
 
 def test_ListView_remove():
@@ -1888,7 +1888,7 @@ def test_ListView_remove():
 
     with pytest.raises(AttributeError):
         # The code to be tested
-        listview.remove('a')
+        listview.remove('a')  # pylint: disable=no-member
 
 
 def test_ListView_sort():
@@ -1899,7 +1899,7 @@ def test_ListView_sort():
 
     with pytest.raises(AttributeError):
         # The code to be tested
-        listview.sort()
+        listview.sort()  # pylint: disable=no-member
 
 
 TESTCASES_LISTVIEW_PICKLE = [
