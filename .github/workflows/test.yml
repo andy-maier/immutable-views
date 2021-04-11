@@ -93,6 +93,16 @@ jobs:
                 \"package_level\": \"latest\" \
               }, \
               { \
+                \"os\": \"ubuntu-latest\", \
+                \"python-version\": \"3.5\", \
+                \"package_level\": \"latest\" \
+              }, \
+              { \
+                \"os\": \"ubuntu-latest\", \
+                \"python-version\": \"3.6\", \
+                \"package_level\": \"latest\" \
+              }, \
+              { \
                 \"os\": \"macos-latest\", \
                 \"python-version\": \"3.9\", \
                 \"package_level\": \"latest\" \
