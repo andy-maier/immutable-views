@@ -24,11 +24,11 @@ Overview
 The **immutable-views** package provides collection classes that are immutable
 views on other (mutable) collection objects:
 
-* `immutable_views.DictView <https://immutable-views.readthedocs.io/en/latest/api.html#immutable_views.DictView>`_ -
+* `immutable_views.DictView <https://immutable-views.readthedocs.io/en/latest/api_dict_view.html>`_ -
   immutable view on another mapping object.
-* `immutable_views.ListView <https://immutable-views.readthedocs.io/en/latest/api.html#immutable_views.ListView>`_ -
+* `immutable_views.ListView <https://immutable-views.readthedocs.io/en/latest/api_list_view.html>`_ -
   immutable view on another list (sequence) object.
-* `immutable_views.SetView <https://immutable-views.readthedocs.io/en/latest/api.html#immutable_views.SetView>`_ -
+* `immutable_views.SetView <https://immutable-views.readthedocs.io/en/latest/api_set_view.html>`_ -
   immutable view on another set object.
 
 An important behavior of views is that they are "live": Since the view
