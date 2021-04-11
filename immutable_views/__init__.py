@@ -6,6 +6,7 @@ from __future__ import absolute_import
 
 from ._dict_view import *  # noqa: F403,F401
 from ._list_view import *  # noqa: F403,F401
+from ._set_view import *  # noqa: F403,F401
 from . import _version
 
 #: The full version of this package including any development levels, as a

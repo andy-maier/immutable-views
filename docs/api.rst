@@ -11,34 +11,10 @@ are fixes for security issues.
 Any functions not described in this section are considered internal and may
 change incompatibly without warning.
 
+.. toctree::
+   :maxdepth: 1
 
-.. _`DictView class`:
-
-DictView class
---------------
-
-.. autoclass:: immutable_views.DictView
-    :members:
-    :autosummary:
-    :autosummary-inherited-members:
-    :special-members: __str__
-
-
-.. _`ListView class`:
-
-ListView class
---------------
-
-.. autoclass:: immutable_views.ListView
-    :members:
-    :autosummary:
-    :autosummary-inherited-members:
-    :special-members: __str__
-
-
-.. _`Package version`:
-
-Package version
----------------
-
-.. autodata:: immutable_views.__version__
+   api_dict_view.rst
+   api_list_view.rst
+   api_set_view.rst
+   api_version.rst
