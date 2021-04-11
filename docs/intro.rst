@@ -103,7 +103,7 @@ Example with sets:
     >>> setview1.add('c')
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
-    TypeError: 'SetView' object does not support item assignment
+    AttributeError: 'SetView' object has no attribute 'add'
 
     # Modifications of the original collection are visible in the view:
     >>> set1.add('c')
