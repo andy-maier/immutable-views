@@ -31,10 +31,10 @@ prerequisite packages into the active Python environment:
     $ pip install immutable-views
 
 
-.. _`The classes and their usage`:
+.. _`Overview`:
 
-The classes and their usage
----------------------------
+Overview
+--------
 
 The **immutable-views** package provides collection classes that are immutable
 views on other (mutable) collection objects:
@@ -77,6 +77,27 @@ Note that the immutability of the view objects only applies to the view object
 itself and to its underlying collection, but not to the items in the underlying
 collection. So if the underlying collection contains mutable objects, they will
 still be mutable when accessed through the view objects.
+
+Note that there are several packages on Pypi that provide immutable
+collections, but they all are collections on their own, and not views on
+other collections. Here is a notable subset of such packages:
+
+* `immutables <https://pypi.org/project/immutables/>`_
+* `pyimmutable <https://pypi.org/project/pyimmutable/>`_
+* `frozenordereddict <https://pypi.org/project/frozenordereddict/>`_
+* `immutabledict <https://pypi.org/project/immutabledict/>`_
+* `frozendict <https://pypi.org/project/immutabledict/>`_
+* `itypes <https://pypi.org/project/itypes/>`_
+* `HashableDict <https://pypi.org/project/HashableDict/>`_
+* `shoobx.immutable <https://pypi.org/project/shoobx.immutable/>`_
+* `immutable-collection <https://pypi.org/project/immutable-collection/>`_
+* `Dict-Path-Immutable <https://pypi.org/project/Dict-Path-Immutable/>`_
+
+
+.. _`Examples`:
+
+Examples
+--------
 
 Example with dictionaries:
 
@@ -149,18 +170,3 @@ Example with sets:
     >>> set1.add('c')
     >>> 'c' in setview1
     True
-
-Note that there are several packages on Pypi that provide immutable
-collections, but they all are collections on their own, and not views on
-other collections. Here is a notable subset of such packages:
-
-* `immutables <https://pypi.org/project/immutables/>`_
-* `pyimmutable <https://pypi.org/project/pyimmutable/>`_
-* `frozenordereddict <https://pypi.org/project/frozenordereddict/>`_
-* `immutabledict <https://pypi.org/project/immutabledict/>`_
-* `frozendict <https://pypi.org/project/immutabledict/>`_
-* `itypes <https://pypi.org/project/itypes/>`_
-* `HashableDict <https://pypi.org/project/HashableDict/>`_
-* `shoobx.immutable <https://pypi.org/project/shoobx.immutable/>`_
-* `immutable-collection <https://pypi.org/project/immutable-collection/>`_
-* `Dict-Path-Immutable <https://pypi.org/project/Dict-Path-Immutable/>`_

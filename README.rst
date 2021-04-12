@@ -66,6 +66,27 @@ itself and to its underlying collection, but not to the items in the underlying
 collection. So if the underlying collection contains mutable objects, they will
 still be mutable when accessed through the view objects.
 
+Note that there are several packages on Pypi that provide immutable
+collections, but they all are collections on their own, and not views on
+other collections. Here is a notable subset of such packages:
+
+* `immutables <https://pypi.org/project/immutables/>`_
+* `pyimmutable <https://pypi.org/project/pyimmutable/>`_
+* `frozenordereddict <https://pypi.org/project/frozenordereddict/>`_
+* `immutabledict <https://pypi.org/project/immutabledict/>`_
+* `frozendict <https://pypi.org/project/immutabledict/>`_
+* `itypes <https://pypi.org/project/itypes/>`_
+* `HashableDict <https://pypi.org/project/HashableDict/>`_
+* `shoobx.immutable <https://pypi.org/project/shoobx.immutable/>`_
+* `immutable-collection <https://pypi.org/project/immutable-collection/>`_
+* `Dict-Path-Immutable <https://pypi.org/project/Dict-Path-Immutable/>`_
+
+
+.. _`Examples`:
+
+Examples
+--------
+
 Example with dictionaries:
 
 .. code-block:: bash
@@ -138,29 +159,12 @@ Example with sets:
     >>> 'c' in setview1
     True
 
-Note that there are several packages on Pypi that provide immutable
-collections, but they all are collections on their own, and not views on
-other collections. Here is a notable subset of such packages:
-
-* `immutables <https://pypi.org/project/immutables/>`_
-* `pyimmutable <https://pypi.org/project/pyimmutable/>`_
-* `frozenordereddict <https://pypi.org/project/frozenordereddict/>`_
-* `immutabledict <https://pypi.org/project/immutabledict/>`_
-* `frozendict <https://pypi.org/project/immutabledict/>`_
-* `itypes <https://pypi.org/project/itypes/>`_
-* `HashableDict <https://pypi.org/project/HashableDict/>`_
-* `shoobx.immutable <https://pypi.org/project/shoobx.immutable/>`_
-* `immutable-collection <https://pypi.org/project/immutable-collection/>`_
-* `Dict-Path-Immutable <https://pypi.org/project/Dict-Path-Immutable/>`_
-
-
-.. _`Documentation and change log`:
 
 Documentation and change log
 ----------------------------
 
-* `Documentation`_
-* `Change log`_
+* `Documentation <https://immutable-views.readthedocs.io/en/latest/>`_
+* `Change log <https://immutable-views.readthedocs.io/en/latest/changes.html>`_
 
 
 License
@@ -168,9 +172,3 @@ License
 
 The **immutable-views** project is provided under the
 `Apache Software License 2.0 <https://raw.githubusercontent.com/andy-maier/immutable-views/master/LICENSE>`_.
-
-
-.. # Links:
-
-.. _`Documentation`: https://immutable-views.readthedocs.io/en/latest/
-.. _`Change log`: https://immutable-views.readthedocs.io/en/latest/changes.html
