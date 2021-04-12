@@ -5,8 +5,8 @@ Change log
 ==========
 
 
-immutable-views 0.6.0.dev1
---------------------------
+Version 0.6.0.dev1
+------------------
 
 Released: not yet
 

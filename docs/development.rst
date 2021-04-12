@@ -458,8 +458,8 @@ Git repo.
 
     .. code-block:: rst
 
-        immutable-views M.N.U.dev1
-        --------------------------
+        Version M.N.U.dev1
+        ------------------
 
         Released: not yet
 
