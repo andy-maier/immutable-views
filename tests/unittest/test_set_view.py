@@ -3459,3 +3459,72 @@ def test_SetView_pickle(testcase, setview):
     assert testcase.exp_exc_types is None
 
     assert_equal(setview2, setview)
+
+
+TESTCASES_SETVIEW_HASH = [
+
+    # Testcases for SetView.__hash__()
+
+    # Each list item is a testcase tuple with these items:
+    # * desc: Short testcase description.
+    # * kwargs: Keyword arguments for the test function:
+    #   * set_obj: Underlying list object.
+    # * exp_exc_types: Expected exception type(s), or None.
+    # * exp_warn_types: Expected warning type(s), or None.
+    # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
+
+    (
+        "Empty set",
+        dict(
+            set_obj=set(),
+        ),
+        TypeError, None, True
+    ),
+    (
+        "Empty frozenset",
+        dict(
+            set_obj=frozenset(),
+        ),
+        None, None, True
+    ),
+
+    (
+        "Set with one item",
+        dict(
+            set_obj={'a'},
+        ),
+        TypeError, None, True
+    ),
+    (
+        "Frozenset with one item",
+        dict(
+            set_obj=frozenset({'a'}),
+        ),
+        None, None, True
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "desc, kwargs, exp_exc_types, exp_warn_types, condition",
+    TESTCASES_SETVIEW_HASH)
+@simplified_test_function
+def test_SetView_hash(testcase, set_obj):
+    """
+    Test function for SetView.__hash__() / hash()
+    """
+
+    view = SetView(set_obj)
+
+    # The code to be tested
+    view_hash = hash(view)
+
+    # Ensure that exceptions raised in the remainder of this function
+    # are not mistaken as expected exceptions
+    assert testcase.exp_exc_types is None
+
+    # If it worked for the view, it must work for the underlying collection
+    set_hash = hash(set_obj)
+
+    # Verify the hash value of the underlying collection is used for the view
+    assert view_hash == set_hash

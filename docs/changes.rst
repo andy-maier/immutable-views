@@ -26,6 +26,9 @@ Released: not yet
 
 * Stated the memory and compute overhead of using immutable view classes.
 
+* Added support for hashing, dependent on the hashability of the underlying
+  collection. (issue #30)
+
 **Cleanup:**
 
 * Docs: Simplified the introduction section.

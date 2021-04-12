@@ -342,16 +342,17 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is greater than
         the other dictionary.
 
-        Whether such an ordering comparison is supported and what it means is
-        up to the underlying dictionary and the other dictionary. For example,
-        the standard Python :class:`dict` class rejects ordering comparisons
-        starting with Python 3.
+        Whether ordering comparison is supported and how ordering is defined
+        depends on the underlying dictionary and the other dictionary. For
+        example, the standard Python :class:`dict` class does not support
+        ordering comparisons on Python 3.
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
         Raises:
           TypeError: The other object is not a dict or DictView.
-          TypeError: Operator not supported.
+          TypeError: The underlying dictionary does not support ordering
+            comparisons.
         """
         # pylint: disable=protected-access
         other_dict = other._dict if isinstance(other, DictView) else other
@@ -363,16 +364,17 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is less than
         the other dictionary.
 
-        Whether such an ordering comparison is supported and what it means is
-        up to the underlying dictionary and the other dictionary. For example,
-        the standard Python :class:`dict` class rejects ordering comparisons
-        starting with Python 3.
+        Whether ordering comparison is supported and how ordering is defined
+        depends on the underlying dictionary and the other dictionary. For
+        example, the standard Python :class:`dict` class does not support
+        ordering comparisons on Python 3.
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
         Raises:
           TypeError: The other object is dict a set or DictView.
-          TypeError: Operator not supported.
+          TypeError: The underlying dictionary does not support ordering
+            comparisons.
         """
         # pylint: disable=protected-access
         other_dict = other._dict if isinstance(other, DictView) else other
@@ -384,16 +386,17 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is greater than or
         equal to the other dictionary.
 
-        Whether such an ordering comparison is supported and what it means is
-        up to the underlying dictionary and the other dictionary. For example,
-        the standard Python :class:`dict` class rejects ordering comparisons
-        starting with Python 3.
+        Whether ordering comparison is supported and how ordering is defined
+        depends on the underlying dictionary and the other dictionary. For
+        example, the standard Python :class:`dict` class does not support
+        ordering comparisons on Python 3.
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
         Raises:
           TypeError: The other object is not a dict or DictView.
-          TypeError: Operator not supported.
+          TypeError: The underlying dictionary does not support ordering
+            comparisons.
         """
         # pylint: disable=protected-access
         other_dict = other._dict if isinstance(other, DictView) else other
@@ -405,20 +408,35 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is less than or
         equal to the other dictionary.
 
-        Whether such an ordering comparison is supported and what it means is
-        up to the underlying dictionary and the other dictionary. For example,
-        the standard Python :class:`dict` class rejects ordering comparisons
-        starting with Python 3.
+        Whether ordering comparison is supported and how ordering is defined
+        depends on the underlying dictionary and the other dictionary. For
+        example, the standard Python :class:`dict` class does not support
+        ordering comparisons on Python 3.
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
         Raises:
           TypeError: The other object is not a dict or DictView.
-          TypeError: Operator not supported.
+          TypeError: The underlying dictionary does not support ordering
+            comparisons.
         """
         # pylint: disable=protected-access
         other_dict = other._dict if isinstance(other, DictView) else other
         return self._dict <= other_dict
+
+    def __hash__(self):
+        """
+        ``hash(self)``:
+        Return a hash value for the dictionary.
+
+        Whether hashing is supported depends on the underlying dictionary. For
+        example, the standard Python :class:`dict` class does not support
+        hashing.
+
+        Raises:
+          TypeError: The underlying dictionary does not support hashing.
+        """
+        return hash(self._dict)
 
 
 # Remove methods that should be present only under certain conditions, and when

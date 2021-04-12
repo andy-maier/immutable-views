@@ -170,3 +170,42 @@ Example with sets:
     >>> set1.add('c')
     >>> 'c' in setview1
     True
+
+
+.. _`Hashing`:
+
+Hashing
+-------
+
+A major motivation for providing immutable collections is the support for
+hashing.
+
+The immutable view classes provided by the **immutable-views** package however
+are only views on the underlying collection. The hashability of the view depends
+on the hashability of the underlying collection: If the underlying collection
+is immutable, it is hashable and then the view is also hashable.
+
+The immutable view classes therefore implement a ``__hash__()`` method that
+delegates to the hash function of the underlying collection. If a collection
+object is hashable, the view object using it will be hashable as well.
+Otherwise, :exc:`TypeError` is raised when the :func:`hash` function is
+called on the view object.
+
+Some examples:
+
+.. table:: Examples for view hashability
+    :widths: 15 30 15
+
+    +------------------------------------+--------------------------------+---------------------+
+    | View class                         | Underlying collection class    | View hashability    |
+    +====================================+================================+=====================+
+    | :class:`~immutable_views.DictView` | :class:`dict` (mutable)        | No                  |
+    +------------------------------------+--------------------------------+---------------------+
+    | :class:`~immutable_views.ListView` | :class:`list` (mutable)        | No                  |
+    +------------------------------------+--------------------------------+---------------------+
+    | :class:`~immutable_views.ListView` | :class:`tuple` (immutable)     | Yes                 |
+    +------------------------------------+--------------------------------+---------------------+
+    | :class:`~immutable_views.SetView`  | :class:`set` (mutable)         | No                  |
+    +------------------------------------+--------------------------------+---------------------+
+    | :class:`~immutable_views.SetView`  | :class:`frozenset` (immutable) | Yes                 |
+    +------------------------------------+--------------------------------+---------------------+

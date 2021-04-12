@@ -348,3 +348,17 @@ class ListView(Sequence):
           ValueError: No such item is found.
         """
         return self._list.index(value, start, stop)
+
+    def __hash__(self):
+        """
+        ``hash(self)``:
+        Return a hash value for the list.
+
+        Whether hashing is supported depends on the underlying list. For
+        example, the standard Python :class:`list` class does not support
+        hashing, but the standard Python :class:`tuple` class does.
+
+        Raises:
+          TypeError: The underlying list does not support hashing.
+        """
+        return hash(self._list)
