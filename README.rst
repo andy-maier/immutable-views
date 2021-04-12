@@ -163,5 +163,5 @@ The **immutable-views** project is provided under the
 
 .. # Links:
 
-.. _`Documentation`: https://immutable-views.readthedocs.io/en/stable/
-.. _`Change log`: https://immutable-views.readthedocs.io/en/stable/changes.html
+.. _`Documentation`: https://immutable-views.readthedocs.io/en/latest/
+.. _`Change log`: https://immutable-views.readthedocs.io/en/latest/changes.html
