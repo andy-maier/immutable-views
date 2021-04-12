@@ -48,6 +48,9 @@ DICT_SUPPORTS_ITER_VIEW = sys.version_info[0:2] == (2, 7)
 # Indicates Python dict supports the has_key() method
 DICT_SUPPORTS_HAS_KEY = sys.version_info[0:2] == (2, 7)
 
+# Indicates Python dict supports the __or__/__ror__() methods
+DICT_SUPPORTS_OR = sys.version_info[0:2] >= (3, 9)
+
 # Used as indicator not to pass an argument in the testcases.
 # Note this has nothing to do with the _OMITTED flag in _immutable_views.py and
 # could be a different value.
@@ -2038,3 +2041,98 @@ def test_DictView_hash(testcase, dict_obj):
 
     # Verify the hash value of the underlying collection is used for the view
     assert view_hash == dict_hash
+
+
+TESTCASES_DICTVIEW_OR = [
+
+    # Testcases for DictView.__or__/__ror__() / self | or
+
+    # Each list item is a testcase tuple with these items:
+    # * desc: Short testcase description.
+    # * kwargs: Keyword arguments for the test function:
+    #   * obj1: DictView object #1 to be used.
+    #   * obj2: DictView object #2 to be used.
+    #   * exp_result: Expected result of the operation, or None.
+    # * exp_exc_types: Expected exception type(s), or None.
+    # * exp_warn_types: Expected warning type(s), or None.
+    # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
+
+    (
+        "Empty dict and empty dict",
+        dict(
+            obj1=DictView({}),
+            obj2=DictView({}),
+            exp_result=DictView({}),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+    (
+        "Dict with two items and equal dict",
+        dict(
+            obj1=DictView(OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+            obj2=DictView(OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+            exp_result=DictView(
+                OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+    (
+        "Empty dict and dict with two items",
+        dict(
+            obj1=DictView(OrderedDict()),
+            obj2=DictView(OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+            exp_result=DictView(
+                OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+    (
+        "Dict with two items and empty dict",
+        dict(
+            obj1=DictView(OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+            obj2=DictView(OrderedDict()),
+            exp_result=DictView(
+                OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+    (
+        "Dict with one item and dict with one item with different key",
+        dict(
+            obj1=DictView(OrderedDict([('Budgie', 'Fish')])),
+            obj2=DictView(OrderedDict([('Dog', 'Cat')])),
+            exp_result=DictView(
+                OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+    (
+        "Dict with one item and dict with one item with same key, diff value",
+        dict(
+            obj1=DictView(OrderedDict([('Budgie', 'Fish')])),
+            obj2=DictView(OrderedDict([('Budgie', 'Cat')])),
+            exp_result=DictView(
+                OrderedDict([('Budgie', 'Cat')])),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "desc, kwargs, exp_exc_types, exp_warn_types, condition",
+    TESTCASES_DICTVIEW_OR)
+@simplified_test_function
+def test_DictView_or(testcase, obj1, obj2, exp_result):
+    """
+    Test function for DictView.__or__/__ror__() / self | or
+    """
+
+    # The code to be tested
+    result = obj1 | obj2
+
+    # Ensure that exceptions raised in the remainder of this function
+    # are not mistaken as expected exceptions
+    assert testcase.exp_exc_types is None
+
+    assert result == exp_result
