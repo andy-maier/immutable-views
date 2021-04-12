@@ -92,12 +92,32 @@ TESTCASES_DICTVIEW_INIT = [
         ),
         None, None, True
     ),
+    (
+        "From DictView of empty dict as positional arg",
+        dict(
+            init_args=(DictView({}),),
+            init_kwargs={},
+            exp_dict=DictView({}),
+            verify_order=True,
+        ),
+        None, None, True
+    ),
 
     # Non-empty original dictionaries
     (
-        "From dict as positional arg",
+        "From non-empty dict as positional arg",
         dict(
             init_args=({'Dog': 'Cat', 'Budgie': 'Fish'},),
+            init_kwargs={},
+            exp_dict=DictView({'Dog': 'Cat', 'Budgie': 'Fish'}),
+            verify_order=False,
+        ),
+        None, None, True
+    ),
+    (
+        "From DictView of non-empty dict as positional arg",
+        dict(
+            init_args=(DictView({'Dog': 'Cat', 'Budgie': 'Fish'}),),
             init_kwargs={},
             exp_dict=DictView({'Dog': 'Cat', 'Budgie': 'Fish'}),
             verify_order=False,
