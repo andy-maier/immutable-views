@@ -234,7 +234,6 @@ endif
 dist_included_files := \
     LICENSE \
     README.rst \
-    INSTALL.md \
     requirements.txt \
     test-requirements.txt \
     setup.py \
