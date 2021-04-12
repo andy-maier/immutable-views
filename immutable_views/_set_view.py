@@ -14,6 +14,7 @@ __all__ = ['SetView']
 
 
 class SetView(Set):
+    # pylint: disable=line-too-long
     """
     An immutable set view.
 
@@ -43,7 +44,15 @@ class SetView(Set):
     Note that only the view object is immutable, not necessarily its items.
     So if the items in the original set are mutable objects, they can be
     modified through the view.
-    """
+
+    Note that in Python, augmented assignment (e.g. `+=` is not guaranteed to
+    modify the left hand object in place, but can result in a new object.
+    For details, see
+    `object.__iadd__() <https://docs.python.org/3/reference/datamodel.html#object.__iadd__>`_.
+    The `+=` operator on a left hand object that is a SetView object results
+    in a new SetView object on a new set object.
+    """  # noqa: E501
+    # pylint: enable=line-too-long
 
     def __init__(self, a_set):
         """
@@ -452,7 +461,7 @@ class SetView(Set):
         Return a boolean indicating whether the set is an inclusive superset
         of the other set.
 
-        The return value indicates whether every element in the other set
+        The return value indicates whether every item in the other set
         (or in case of a SetView, its original set) is in the original set.
 
         The other object must be a :class:`set` or :class:`SetView`.
@@ -469,7 +478,7 @@ class SetView(Set):
         Return a boolean indicating whether the set is an inclusive superset
         of the other iterable.
 
-        The return value indicates whether every element in the other iterable
+        The return value indicates whether every item in the other iterable
         (or in case of a SetView, its original set) is in the original set.
 
         The other object must be an :term:`py3:iterable`.
@@ -487,7 +496,7 @@ class SetView(Set):
         Return a boolean indicating whether the set is an inclusive subset
         of the other set.
 
-        The return value indicates whether every element in the original
+        The return value indicates whether every item in the original
         set is in the other set (or in case of a SetView, its original set).
 
         The other object must be a :class:`set` or :class:`SetView`.
@@ -504,7 +513,7 @@ class SetView(Set):
         Return a boolean indicating whether the set is an inclusive subset
         of the other iterable.
 
-        The return value indicates whether every element in the original set
+        The return value indicates whether every item in the original set
         is in the other iterable (or in case of a SetView, its original set).
 
         The other object must be an :term:`py3:iterable`.
@@ -538,10 +547,12 @@ class SetView(Set):
         """
         Return a new view on a shallow copy of the set.
 
-        Note: If the original set is immutable, the new set may be the
-        original set object; this is the case e.g. for an empty tuple.
-        If the original set is mutable, the new set is always a different
-        object than the original set.
+        The returned :class:`SetView` object is a new view object on a set
+        object of the type of the original set.
+
+        If the set type is immutable, the returned set object may be the
+        original set object. If the set type is mutable, the returned set is
+        a new set object that is a shallow copy of the original set object.
         """
         org_class = self._set.__class__
         new_set = org_class(self._set)  # May be same object if immutable

@@ -1364,8 +1364,9 @@ def test_DictView_repr(testcase, obj):
     # Note: This only tests for existence of each item, not for excess items
     # or representing the correct order.
     for item in obj.items():
-        exp_item_result = "{0!r}: {1!r}".format(*item)
-        assert exp_item_result in result
+        exp_item_result1 = "{0!r}: {1!r}".format(*item)
+        exp_item_result2 = "({0!r}, {1!r})".format(*item)
+        assert exp_item_result1 in result or exp_item_result2 in result
 
 
 TESTCASES_DICTVIEW_COPY = [

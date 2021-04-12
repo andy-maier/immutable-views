@@ -4,7 +4,6 @@ An immutable list view.
 
 from __future__ import print_function, absolute_import
 
-import sys
 try:
     from collections.abc import Sequence
 except ImportError:
@@ -12,12 +11,6 @@ except ImportError:
     from collections import Sequence
 
 __all__ = ['ListView']
-
-if sys.version_info[0] == 2:
-    # pylint: disable=undefined-variable
-    _INTEGER_TYPES = (long, int)  # noqa: F821
-else:
-    _INTEGER_TYPES = (int,)
 
 
 class ListView(Sequence):
@@ -49,13 +42,9 @@ class ListView(Sequence):
     For details, see
     `object.__iadd__() <https://docs.python.org/3/reference/datamodel.html#object.__iadd__>`_.
     The `+=` operator on a left hand object that is a ListView object results
-    in a new ListView object on a new original list object.
+    in a new ListView object on a new list object.
     """  # noqa: E501
-
-    # Methods not implemented:
-    #
-    # * __getattribute__(self, name): The method inherited from object is used;
-    #   no reason to have a different implementation.
+    # pylint: enable=line-too-long
 
     def __init__(self, a_list):
         """
@@ -63,55 +52,77 @@ class ListView(Sequence):
 
           a_list (:class:`~py3:collections.abc.Sequence`):
             The original list.
+            If this object is a ListView, its original list is used.
         """
         if not isinstance(a_list, Sequence):
             raise TypeError(
                 "The a_list parameter must be a Sequence, but is: {}".
                 format(type(a_list)))
+        if isinstance(a_list, ListView):
+            a_list = a_list._list
         self._list = a_list
 
     def __repr__(self):
         """
-        Return a string representation of the original list that is
-        suitable for debugging.
+        ``repr(self)``:
+        Return a string representation of the view suitable for debugging.
+
+        The original list is represented using its ``repr()``
+        representation.
         """
         return "{0.__class__.__name__}({1!r})".format(self, self._list)
 
     def __getitem__(self, index):
         """
-        Return the value in the original list at the index position.
+        ``self[index]``:
+         Return the list value at the index position.
+
+        Raises:
+          IndexError: Index out of range.
         """
         return self._list[index]
 
     def __len__(self):
         """
-        Return the number of items in the original list.
+        ``len(self)``:
+        Return the number of items in the list.
+
+        The return value is the number of items in the original list.
         """
         return len(self._list)
 
     def __contains__(self, value):
         """
-        Return a boolean indicating whether the list contains at least one
-        item with the value.
+        ``value in self``:
+        Return a boolean indicating whether the list contains a value.
+
+        The return value indicates whether the original list contains an
+        item that is equal to the value.
         """
         return value in self._list
 
     def __iter__(self):
         """
-        Return an iterator through the original list in iteration order.
+        Return an iterator through the list items.
         """
         return iter(self._list)
 
     def __add__(self, other):
         """
-        Return a new :class:`ListView` object that is a view on a new list
-        object that contains the items from the left hand operand (``self``)
-        and the items from the right hand operand (``other``).
+        ``self + other``:
+        Return a new view on the concatenation of the list and the other list.
 
-        The operands are not changed.
+        The returned :class:`ListView` object is a view on a new list object of
+        the type of the left hand operand that contains the items that are in
+        the original list of the left hand operand, concatenated with the
+        items in the other list (or in case of a ListView, its original list).
+
+        The other object must be an :term:`py3:iterable` or :class:`ListView`.
+
+        The list and the other list are not changed.
 
         Raises:
-          TypeError: The other iterable is not an iterable
+          TypeError: The other object is not an iterable.
         """
         # pylint: disable=protected-access
         other_list = other._list if isinstance(other, ListView) else other
@@ -120,43 +131,63 @@ class ListView(Sequence):
 
     def __mul__(self, number):
         """
-        Return a new :class:`ListView` object that is a view on a new list
-        object that contains the items from the left hand operand (``self``)
-        as many times as specified by the right hand operand (``number``).
+        ``self * number``:
+        Return a new view on the multiplication of the list with a number.
+
+        The returned :class:`ListView` object is a view on a new list object of
+        the type of the left hand operand that contains the items that are in
+        the original list of the left hand operand as many times as specified
+        by the right hand operand.
 
         A number <= 0 causes the returned list to be empty.
 
-        The operands are not changed.
+        The left hand operand is not changed.
         """
         new_list = self._list * number
         return ListView(new_list)
 
     def __rmul__(self, number):
         """
-        Return a new :class:`ListView` object that is a view on a new list
-        object that contains the items from the right hand operand (``self``)
-        as many times as specified by the left hand operand (``number``).
+        ``number * self``:
+        Return a new view on the multiplication of the list with a number.
+
+        This method is a fallback and is called only if the left operand does
+        not support the operation.
+
+        The returned :class:`ListView` object is a view on a new list object of
+        the type of the right hand operand that contains the items that are in
+        the original list of the right hand operand as many times as specified
+        by the left hand operand.
 
         A number <= 0 causes the returned list to be empty.
 
-        The right hand operand (``self``) is not changed.
+        The right hand operand is not changed.
         """
         return self * number  # Delegates to __mul__()
 
     def __reversed__(self):
         """
-        Return a new :class:`ListView` object that is a view on a new list
-        object that that is a shallow copy of the list that has its items
-        reversed in order.
+        ``reversed(self) ...``:
+        Return an iterator through the list in reversed iteration order.
+
+        The returned iterator yields the items in the original list in the
+        reversed iteration order.
         """
-        new_list = list(reversed(self._list))
-        return ListView(new_list)
+        return reversed(self._list)
 
     def __eq__(self, other):
         """
-        Return a boolean indicating whether the original list is
-        equal to
-        the other list (or in case of a ListView, its original list).
+        ``self == other``:
+        Return a boolean indicating whether the list is equal to the other list.
+
+        The return value indicates whether the items in the original list are
+        equal to the items in the other list (or in case of a ListView, its
+        original list).
+
+        The other object must be a :class:`list` or :class:`ListView`.
+
+        Raises:
+          TypeError: The other object is not a list or ListView.
         """
         # pylint: disable=protected-access
         other_list = other._list if isinstance(other, ListView) else other
@@ -164,70 +195,127 @@ class ListView(Sequence):
 
     def __ne__(self, other):
         """
-        Return a boolean indicating whether the original list is
-        not equal to
-        the other list (or in case of a ListView, its original list).
+        ``self != other``:
+        Return a boolean indicating whether the list is not equal to the other
+        list.
+
+        The return value indicates whether the items in the original list are
+        not equal to the items in the other list (or in case of a ListView, its
+        original list).
+
+        The other object must be a :class:`list` or :class:`ListView`.
+
+        Raises:
+          TypeError: The other object is not a list or ListView.
         """
         # pylint: disable=protected-access
         other_list = other._list if isinstance(other, ListView) else other
         return self._list != other_list
 
     def __gt__(self, other):
+        # pylint: disable=line-too-long
         """
-        Return a boolean indicating whether the original list is
-        greater than
-        the other list (or in case of a ListView, its original list).
-        """
+        ``self > other``:
+        Return a boolean indicating whether the list is greater than the other
+        list.
+
+        The return value indicates whether the original list is greater than
+        the other list (or in case of a ListView, its original list), based on
+        the lexicographical ordering Python defines for sequence types
+        (see https://docs.python.org/3/tutorial/datastructures.html#comparing-sequences-and-other-types)
+
+        The other object must be a :class:`list` or :class:`ListView`.
+
+        Raises:
+          TypeError: The other object is not a list or ListView.
+        """  # noqa: E501
+        # pylint: enable=line-too-long
         # pylint: disable=protected-access
         other_list = other._list if isinstance(other, ListView) else other
         return self._list > other_list
 
     def __lt__(self, other):
+        # pylint: disable=line-too-long
         """
-        Return a boolean indicating whether the original list is
-        less than
-        the other list (or in case of a ListView, its original list).
-        """
+        ``self < other``:
+        Return a boolean indicating whether the list is less than the other
+        list.
+
+        The return value indicates whether the original list is less than
+        the other list (or in case of a ListView, its original list), based on
+        the lexicographical ordering Python defines for sequence types
+        (see https://docs.python.org/3/tutorial/datastructures.html#comparing-sequences-and-other-types)
+
+        The other object must be a :class:`list` or :class:`ListView`.
+
+        Raises:
+          TypeError: The other object is not a list or ListView.
+        """  # noqa: E501
+        # pylint: enable=line-too-long
         # pylint: disable=protected-access
         other_list = other._list if isinstance(other, ListView) else other
         return self._list < other_list
 
     def __ge__(self, other):
+        # pylint: disable=line-too-long
         """
-        Return a boolean indicating whether the original list is
-        greater than or equal to
-        the other list (or in case of a ListView, its original list).
-        """
+        ``self < other``:
+        Return a boolean indicating whether the list is greater than or equal to
+        the other list.
+
+        The return value indicates whether the original list is greater than or
+        equal to the other list (or in case of a ListView, its original list),
+        based on the lexicographical ordering Python defines for sequence types
+        (see https://docs.python.org/3/tutorial/datastructures.html#comparing-sequences-and-other-types)
+
+        The other object must be a :class:`list` or :class:`ListView`.
+
+        Raises:
+          TypeError: The other object is not a list or ListView.
+        """  # noqa: E501
+        # pylint: enable=line-too-long
         # pylint: disable=protected-access
         other_list = other._list if isinstance(other, ListView) else other
         return self._list >= other_list
 
     def __le__(self, other):
+        # pylint: disable=line-too-long
         """
-        Return a boolean indicating whether the original list is
-        less than or equal to
-        the other list (or in case of a ListView, its original list).
-        """
+        ``self < other``:
+        Return a boolean indicating whether the list is less than or equal to
+        the other list.
+
+        The return value indicates whether the original list is less than or
+        equal to the other list (or in case of a ListView, its original list),
+        based on the lexicographical ordering Python defines for sequence types
+        (see https://docs.python.org/3/tutorial/datastructures.html#comparing-sequences-and-other-types)
+
+        The other object must be a :class:`list` or :class:`ListView`.
+
+        Raises:
+          TypeError: The other object is not a list or ListView.
+        """  # noqa: E501
+        # pylint: enable=line-too-long
         # pylint: disable=protected-access
         other_list = other._list if isinstance(other, ListView) else other
         return self._list <= other_list
 
     def count(self, value):
         """
-        Return the number of times the specified value occurs in the
-        original list.
+        Return the number of times the specified value occurs in the list.
         """
         return self._list.count(value)
 
     def copy(self):
         """
-        Return a new ListView object that is a view on a new list that
-        is a shallow copy of the original list.
+        Return a new view on a shallow copy of the list.
 
-        Note: If the original list is immutable, the new list may be the
-        original list object; this is the case e.g. for an empty tuple.
-        If the original list is mutable, the new list is always a different
-        object than the original list.
+        The returned :class:`ListView` object is a new view object on a list
+        object of the type of the original list.
+
+        If the list type is immutable, the returned list object may be the
+        original list object. If the list type is mutable, the returned list is
+        a new list object that is a shallow copy of the original list object.
         """
         org_class = self._list.__class__
         new_list = org_class(self._list)  # May be same object if immutable
@@ -235,8 +323,7 @@ class ListView(Sequence):
 
     def index(self, value, start=0, stop=9223372036854775807):
         """
-        Return the index of the first item that is equal to the specified
-        value.
+        Return the index of the first item in the list with the specified value.
 
         The search is limited to the index range defined by the specified
         ``start`` and ``stop`` parameters, whereby ``stop`` is the index
