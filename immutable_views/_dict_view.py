@@ -482,8 +482,8 @@ class DictView(Mapping):
         not support the operation.
 
         The returned :class:`DictView` object is a view on a new dictionary
-        object of the type of the left hand operand that contains all the items
-        from the underlying dictionary of the left hand operand, updated by the
+        object of the type of the right hand operand that contains all the items
+        from the underlying dictionary of the right hand operand, updated by the
         items from the other dictionary (or in case of a DictView, its
         underlying dictionary).
 
