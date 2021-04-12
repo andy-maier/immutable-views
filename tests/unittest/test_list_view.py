@@ -13,6 +13,7 @@ except ImportError:
     # Python 2
     from collections import Sequence, MutableSequence
 import pytest
+from nocaselist import NocaseList
 
 from ..utils.simplified_test_function import simplified_test_function
 
@@ -2039,3 +2040,86 @@ def test_ListView_pickle(testcase, listview):
     assert testcase.exp_exc_types is None
 
     assert_equal(listview2, listview)
+
+
+TESTCASES_LISTVIEW_HASH = [
+
+    # Testcases for ListView.__hash__()
+
+    # Each list item is a testcase tuple with these items:
+    # * desc: Short testcase description.
+    # * kwargs: Keyword arguments for the test function:
+    #   * list_obj: Underlying list object.
+    # * exp_exc_types: Expected exception type(s), or None.
+    # * exp_warn_types: Expected warning type(s), or None.
+    # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
+
+    (
+        "Empty list",
+        dict(
+            list_obj=[],
+        ),
+        TypeError, None, True
+    ),
+    (
+        "Empty tuple",
+        dict(
+            list_obj=tuple(),
+        ),
+        None, None, True
+    ),
+    (
+        "Empty NocaseList",
+        dict(
+            list_obj=NocaseList(),
+        ),
+        TypeError, None, True
+    ),
+
+    (
+        "List with one item",
+        dict(
+            list_obj=['a'],
+        ),
+        TypeError, None, True
+    ),
+    (
+        "Tuple with one item",
+        dict(
+            list_obj=('a',),
+        ),
+        None, None, True
+    ),
+    (
+        "NocaseList with one item",
+        dict(
+            list_obj=NocaseList(['a']),
+        ),
+        TypeError, None, True
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "desc, kwargs, exp_exc_types, exp_warn_types, condition",
+    TESTCASES_LISTVIEW_HASH)
+@simplified_test_function
+def test_ListView_hash(testcase, list_obj):
+    """
+    Test function for ListView.__hash__() / hash()
+    """
+
+    view = ListView(list_obj)
+
+    # The code to be tested
+    view_hash = hash(view)
+
+    # Ensure that exceptions raised in the remainder of this function
+    # are not mistaken as expected exceptions
+    assert testcase.exp_exc_types is None
+
+    # If it worked for the view, it must work for the underlying collection
+    list_hash = hash(list_obj)
+
+    # Verify the hash value of the underlying collection is used for the view
+    assert view_hash == list_hash

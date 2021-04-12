@@ -560,3 +560,17 @@ class SetView(Set):
         org_class = self._set.__class__
         new_set = org_class(self._set)  # May be same object if immutable
         return SetView(new_set)
+
+    def __hash__(self):
+        """
+        ``hash(self)``:
+        Return a hash value for the set.
+
+        Whether hashing is supported depends on the underlying set. For
+        example, the standard Python :class:`set` class does not support
+        hashing, but the standard Python :class:`frozenset` class does.
+
+        Raises:
+          TypeError: The underlying set does not support hashing.
+        """
+        return hash(self._set)

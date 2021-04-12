@@ -14,6 +14,7 @@ except ImportError:
     from collections import KeysView, ValuesView, ItemsView, Iterator, \
         MutableMapping
 import pytest
+from nocasedict import NocaseDict, HashableMixin
 
 from ..utils.simplified_test_function import simplified_test_function
 
@@ -22,6 +23,12 @@ from ..utils.import_installed import import_installed
 immutable_views = import_installed('immutable_views')
 from immutable_views import DictView  # noqa: E402
 # pylint: enable=wrong-import-position, wrong-import-order, invalid-name
+
+
+class HashableNocaseDict(HashableMixin, NocaseDict):
+    """Hashable dictionary, for testing"""
+    pass
+
 
 PY2 = sys.version_info[0] == 2
 
@@ -1948,3 +1955,86 @@ def test_DictView_ordering(testcase, obj1, obj2, op, exp_result):
     assert testcase.exp_exc_types is None
 
     assert result == exp_result
+
+
+TESTCASES_DICTVIEW_HASH = [
+
+    # Testcases for DictView.__hash__()
+
+    # Each list item is a testcase tuple with these items:
+    # * desc: Short testcase description.
+    # * kwargs: Keyword arguments for the test function:
+    #   * dict_obj: Underlying dictionary object.
+    # * exp_exc_types: Expected exception type(s), or None.
+    # * exp_warn_types: Expected warning type(s), or None.
+    # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
+
+    (
+        "Empty dict",
+        dict(
+            dict_obj={},
+        ),
+        TypeError, None, True
+    ),
+    (
+        "Empty OrderedDict",
+        dict(
+            dict_obj=OrderedDict(),
+        ),
+        TypeError, None, True
+    ),
+    (
+        "Empty HashableNocaseDict",
+        dict(
+            dict_obj=HashableNocaseDict(),
+        ),
+        None, None, True
+    ),
+
+    (
+        "Dict with one item",
+        dict(
+            dict_obj=dict([('a', 1)]),
+        ),
+        TypeError, None, True
+    ),
+    (
+        "OrderedDict with one item",
+        dict(
+            dict_obj=OrderedDict([('a', 1)]),
+        ),
+        TypeError, None, True
+    ),
+    (
+        "HashableNocaseDict with one item",
+        dict(
+            dict_obj=HashableNocaseDict([('a', 1)]),
+        ),
+        None, None, True
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "desc, kwargs, exp_exc_types, exp_warn_types, condition",
+    TESTCASES_DICTVIEW_HASH)
+@simplified_test_function
+def test_DictView_hash(testcase, dict_obj):
+    """
+    Test function for DictView.__hash__() / hash()
+    """
+
+    view = DictView(dict_obj)
+
+    # The code to be tested
+    view_hash = hash(view)
+
+    # Ensure that exceptions raised in the remainder of this function
+    # are not mistaken as expected exceptions
+    assert testcase.exp_exc_types is None
+
+    # If it worked for the view, it must work for the underlying collection
+    dict_hash = hash(dict_obj)
+
+    # Verify the hash value of the underlying collection is used for the view
+    assert view_hash == dict_hash
