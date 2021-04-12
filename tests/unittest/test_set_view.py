@@ -64,7 +64,7 @@ TESTCASES_SETVIEW_INIT = [
     # * exp_warn_types: Expected warning type(s), or None.
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
-    # Empty original sequences
+    # Empty underlying sequences
     (
         "From empty set as positional arg",
         dict(
@@ -82,7 +82,7 @@ TESTCASES_SETVIEW_INIT = [
         None, None, True
     ),
 
-    # Non-empty original sequence
+    # Non-empty underlying sequence
     (
         "From set with one item as positional arg",
         dict(
@@ -193,7 +193,7 @@ def test_SetView_init(testcase, init_args, init_kwargs):
     # Verify that SetView inherits from Set
     assert isinstance(setview, Set)
 
-    # Verify the original set object's identity
+    # Verify the underlying set object's identity
     if isinstance(a_set_arg, SetView):
         assert setview_set is a_set_arg._set  # pylint: disable=protected-access
     else:
@@ -683,7 +683,7 @@ def test_SetView_iand(testcase, setview, other, exp_result):
     # For details, see
     # https://docs.python.org/3/reference/datamodel.html#object.__iand__.
     # For SetView, the `&=` operator results in a new SetView object on a new
-    # original set object.
+    # underlying set object.
     assert id(setview_copy) != setview_copy_id
 
     assert_equal(setview_copy, exp_result)
@@ -1071,7 +1071,7 @@ def test_SetView_ior(testcase, setview, other, exp_result):
     # For details, see
     # https://docs.python.org/3/reference/datamodel.html#object.__ior__.
     # For SetView, the `|=` operator results in a new SetView object on a new
-    # original set object.
+    # underlying set object.
     assert id(setview_copy) != setview_copy_id
 
     assert_equal(setview_copy, exp_result)
@@ -1459,7 +1459,7 @@ def test_SetView_isub(testcase, setview, other, exp_result):
     # For details, see
     # https://docs.python.org/3/reference/datamodel.html#object.__isub__.
     # For SetView, the `-=` operator results in a new SetView object on a new
-    # original set object.
+    # underlying set object.
     assert id(setview_copy) != setview_copy_id
 
     assert_equal(setview_copy, exp_result)
@@ -1840,7 +1840,7 @@ def test_SetView_ixor(testcase, setview, other, exp_result):
     # For details, see
     # https://docs.python.org/3/reference/datamodel.html#object.__ixor__.
     # For SetView, the `^=` operator results in a new SetView object on a new
-    # original set object.
+    # underlying set object.
     assert id(setview_copy) != setview_copy_id
 
     assert_equal(setview_copy, exp_result)
@@ -3337,16 +3337,16 @@ def test_SetView_copy(testcase, setview):
     # Verify the result is a different object than the SetView
     assert id(setview_copy) != id(setview)
 
-    # Verify the new list is a different object than the original list,
+    # Verify the new list is a different object than the underlying list,
     # if mutable
     if isinstance(setview_set, MutableSet):
         assert id(setview_copy_set) != id(setview_set)
 
-    # Verify the new list has the same type as the original list
+    # Verify the new list has the same type as the underlying list
     # pylint: disable=unidiomatic-typecheck
     assert type(setview_copy_set) == type(setview_set)
 
-    # Verify the new list is equal to the original list
+    # Verify the new list is equal to the underlying list
     assert setview_copy_set == setview_set
 
 

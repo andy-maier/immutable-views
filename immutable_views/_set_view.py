@@ -21,15 +21,16 @@ class SetView(Set):
     Derived from :class:`~py3:collections.abc.Set`.
 
     This class provides an immutable view on a possibly mutable set object.
-    The set object must be an instance of :class:`~py3:collections.abc.Set`.
+    The set object must be an instance of :class:`~py3:collections.abc.Set`,
+    e.g. :class:`set`, or a user-defined class.
 
     This can be used for example when a class maintains a set that should be
     made available to users of the class without allowing them to modify the
     set.
 
     In the description of this class, the term 'view' always refers to the
-    :class:`SetView` object, and the term 'set' or 'original set' refers to the
-    set object the view is based on.
+    :class:`SetView` object, and the term 'set' or 'underlying set' refers to
+    the set object the view is based on.
 
     The :class:`SetView` class supports the complete behavior of Python class
     :class:`set`, except for any methods that would modify the set.
@@ -38,19 +39,21 @@ class SetView(Set):
     (the methods are listed in the table at the top of the linked page).
 
     The view is "live": Since the view class delegates all operations to the
-    original set, any modification of the original set object will be visible
-    in the view object.
+    underlying set, any modification of the underlying set object will be
+    visible in the view object.
 
     Note that only the view object is immutable, not necessarily its items.
-    So if the items in the original set are mutable objects, they can be
+    So if the items in the underlying set are mutable objects, they can be
     modified through the view.
 
-    Note that in Python, augmented assignment (e.g. `+=` is not guaranteed to
-    modify the left hand object in place, but can result in a new object.
+    Note that in Python, augmented assignment (e.g. ``x += y``) is not
+    guaranteed to modify the left hand object in place, but can result in the
+    left hand name being bound to a new object (like in ``x = x + y``).
     For details, see
     `object.__iadd__() <https://docs.python.org/3/reference/datamodel.html#object.__iadd__>`_.
-    The `+=` operator on a left hand object that is a SetView object results
-    in a new SetView object on a new set object.
+
+    For the SetView class, augmented assignment is supported and results in
+    binding the left hand name to a new SetView object.
     """  # noqa: E501
     # pylint: enable=line-too-long
 
@@ -59,8 +62,8 @@ class SetView(Set):
         Parameters:
 
           a_set (:class:`~py3:collections.abc.Set`):
-            The original set.
-            If this object is a SetView, its original set is used.
+            The underlying set.
+            If this object is a SetView, its underlying set is used.
         """
         if not isinstance(a_set, Set):
             raise TypeError(
@@ -75,7 +78,7 @@ class SetView(Set):
         ``repr(self)``:
         Return a string representation of the view suitable for debugging.
 
-        The original set is represented using its ``repr()`` representation.
+        The underlying set is represented using its ``repr()`` representation.
         """
         return "{0.__class__.__name__}({1!r})".format(self, self._set)
 
@@ -84,7 +87,7 @@ class SetView(Set):
         ``len(self)``:
         Return the number of items in the set.
 
-        The return value is the number of items in the original set.
+        The return value is the number of items in the underlying set.
         """
         return len(self._set)
 
@@ -93,7 +96,7 @@ class SetView(Set):
         ``value in self``:
         Return a boolean indicating whether the set contains a value.
 
-        The return value indicates whether the original set contains an item
+        The return value indicates whether the underlying set contains an item
         that is equal to the value.
         """
         return value in self._set
@@ -103,7 +106,7 @@ class SetView(Set):
         ``iter(self) ...``:
         Return an iterator through the set.
 
-        The returned iterator yields the items in the original set in its
+        The returned iterator yields the items in the underlying set in its
         iteration order.
         """
         return iter(self._set)
@@ -115,8 +118,8 @@ class SetView(Set):
 
         The returned :class:`SetView` object is a view on a new set object of
         the type of the left hand operand that contains the items that are in
-        the original set of the left hand operand and in the other set
-        (or in case of a SetView, its original set).
+        the underlying set of the left hand operand and in the other set
+        (or in case of a SetView, its underlying set).
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -140,8 +143,8 @@ class SetView(Set):
 
         The returned :class:`SetView` object is a view on a new set object of
         the type of the right hand operand that contains the items that are in
-        the original set of the right hand operand and in the other set
-        (or in case of a SetView, its original set).
+        the underlying set of the right hand operand and in the other set
+        (or in case of a SetView, its underlying set).
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -158,9 +161,9 @@ class SetView(Set):
         iterables.
 
         The returned :class:`SetView` object is a view on a new set object of
-        the type of the original set that contains the items that are in the
-        original set and in the other iterables (or in case of SetView objects,
-        their original sets).
+        the type of the underlying set that contains the items that are in the
+        underlying set and in the other iterables (or in case of SetView
+        objects, their underlying sets).
 
         The other objects must be :term:`iterables <py3:iterable>`.
 
@@ -182,8 +185,8 @@ class SetView(Set):
 
         The returned :class:`SetView` object is a view on a new set object of
         the type of the left hand operand that contains all the (unique) items
-        from the original set of the left hand operand and the other set
-        (or in case of a SetView, its original set).
+        from the underlying set of the left hand operand and the other set
+        (or in case of a SetView, its underlying set).
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -207,8 +210,8 @@ class SetView(Set):
 
         The returned :class:`SetView` object is a view on a new set object of
         the type of the right hand operand that contains all the (unique) items
-        from the original set of the right hand operand and the other set
-        (or in case of a SetView, its original set).
+        from the underlying set of the right hand operand and the other set
+        (or in case of a SetView, its underlying set).
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -224,9 +227,9 @@ class SetView(Set):
         Return a new view on the union of the set and the other iterables.
 
         The returned :class:`SetView` object is a view on a new set object of
-        the type of the original set that contains all the (unique) items from
-        the original set and the other iterables (or in case of SetView objects,
-        their original sets).
+        the type of the underlying set that contains all the (unique) items from
+        the underlying set and the other iterables (or in case of SetView
+        objects, their underlying sets).
 
         The other objects must be :term:`iterables <py3:iterable>`.
 
@@ -248,8 +251,8 @@ class SetView(Set):
 
         The returned :class:`SetView` object is a view on a new set object of
         the type of the left hand operand that contains the items that are in
-        the original set of the left hand operand but not in the other set
-        (or in case of a SetView, its original set).
+        the underlying set of the left hand operand but not in the other set
+        (or in case of a SetView, its underlying set).
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -273,8 +276,8 @@ class SetView(Set):
 
         The returned :class:`SetView` object is a view on a new set object of
         the type of the left hand operand that contains the items that are in
-        the other set (or in case of a SetView, its original set) but not in
-        the original set of the left hand operand.
+        the other set (or in case of a SetView, its underlying set) but not in
+        the underlying set of the left hand operand.
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -297,9 +300,9 @@ class SetView(Set):
         iterables.
 
         The returned :class:`SetView` object is a view on a new set object of
-        the type of the original set that contains the items that are in the
-        original set but not in any of the other iterables (or in case of
-        SetView objects, their original sets).
+        the type of the underlying set that contains the items that are in the
+        underlying set but not in any of the other iterables (or in case of
+        SetView objects, their underlying sets).
 
         The other objects must be :term:`iterables <py3:iterable>`.
 
@@ -322,8 +325,8 @@ class SetView(Set):
 
         The returned :class:`SetView` object is a view on a new set object of
         the type of the left hand operand that contains the items that are in
-        either the original set of the left hand operand or in the other set
-        (or in case of a SetView, its original set), but not in both.
+        either the underlying set of the left hand operand or in the other set
+        (or in case of a SetView, its underlying set), but not in both.
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -348,8 +351,8 @@ class SetView(Set):
 
         The returned :class:`SetView` object is a view on a new set object of
         the type of the right hand operand that contains the items that are in
-        either the original set of the right hand operand or in the other set
-        (or in case of a SetView, its original set), but not in both.
+        either the underlying set of the right hand operand or in the other set
+        (or in case of a SetView, its underlying set), but not in both.
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -366,9 +369,9 @@ class SetView(Set):
         iterable.
 
         The returned :class:`SetView` object is a view on a new set object of
-        the type of the original set that contains the items that are in either
-        the original set or in the other iterable (or in case of a SetView, its
-        original set), but not in both.
+        the type of the underlying set that contains the items that are in
+        either the underlying set or in the other iterable (or in case of a
+        SetView, its underlying set), but not in both.
 
         The other object must be an :term:`py3:iterable`.
 
@@ -387,9 +390,9 @@ class SetView(Set):
         ``self == other``:
         Return a boolean indicating whether the set is equal to the other set.
 
-        The return value indicates whether the items in the original set are
+        The return value indicates whether the items in the underlying set are
         equal to the items in the other set (or in case of a SetView, its
-        original set).
+        underlying set).
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -406,9 +409,9 @@ class SetView(Set):
         Return a boolean indicating whether the set is not equal to the other
         set.
 
-        The return value indicates whether the items in the original set are
+        The return value indicates whether the items in the underlying set are
         not equal to the items in the other set (or in case of a SetView, its
-        original set).
+        underlying set).
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -425,8 +428,8 @@ class SetView(Set):
         Return a boolean indicating whether the set is a proper superset of the
         other set.
 
-        The return value indicates whether the original set is a proper
-        superset of the other set (or in case of a SetView, its original set).
+        The return value indicates whether the underlying set is a proper
+        superset of the other set (or in case of a SetView, its underlying set).
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -443,8 +446,8 @@ class SetView(Set):
         Return a boolean indicating whether the set is a proper subset of the
         other set.
 
-        The return value indicates whether the original set is a proper
-        subset of the other set (or in case of a SetView, its original set).
+        The return value indicates whether the underlying set is a proper
+        subset of the other set (or in case of a SetView, its underlying set).
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -462,7 +465,7 @@ class SetView(Set):
         of the other set.
 
         The return value indicates whether every item in the other set
-        (or in case of a SetView, its original set) is in the original set.
+        (or in case of a SetView, its underlying set) is in the underlying set.
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -479,7 +482,7 @@ class SetView(Set):
         of the other iterable.
 
         The return value indicates whether every item in the other iterable
-        (or in case of a SetView, its original set) is in the original set.
+        (or in case of a SetView, its underlying set) is in the underlying set.
 
         The other object must be an :term:`py3:iterable`.
 
@@ -496,8 +499,8 @@ class SetView(Set):
         Return a boolean indicating whether the set is an inclusive subset
         of the other set.
 
-        The return value indicates whether every item in the original
-        set is in the other set (or in case of a SetView, its original set).
+        The return value indicates whether every item in the underlying
+        set is in the other set (or in case of a SetView, its underlying set).
 
         The other object must be a :class:`set` or :class:`SetView`.
 
@@ -513,8 +516,8 @@ class SetView(Set):
         Return a boolean indicating whether the set is an inclusive subset
         of the other iterable.
 
-        The return value indicates whether every item in the original set
-        is in the other iterable (or in case of a SetView, its original set).
+        The return value indicates whether every item in the underlying set
+        is in the other iterable (or in case of a SetView, its underlying set).
 
         The other object must be an :term:`py3:iterable`.
 
@@ -530,8 +533,8 @@ class SetView(Set):
         Return a boolean indicating whether the set does not intersect with
         the other iterable.
 
-        The return value indicates whether the original set has no items in
-        common with the other iterable (or in case of a SetView, its original
+        The return value indicates whether the underlying set has no items in
+        common with the other iterable (or in case of a SetView, its underlying
         set).
 
         The other object must be an :term:`py3:iterable`.
@@ -548,11 +551,11 @@ class SetView(Set):
         Return a new view on a shallow copy of the set.
 
         The returned :class:`SetView` object is a new view object on a set
-        object of the type of the original set.
+        object of the type of the underlying set.
 
         If the set type is immutable, the returned set object may be the
-        original set object. If the set type is mutable, the returned set is
-        a new set object that is a shallow copy of the original set object.
+        underlying set object. If the set type is mutable, the returned set is
+        a new set object that is a shallow copy of the underlying set object.
         """
         org_class = self._set.__class__
         new_set = org_class(self._set)  # May be same object if immutable

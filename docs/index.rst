@@ -6,7 +6,7 @@ immutable-views - Immutable views on other collection objects
    :maxdepth: 2
    :numbered:
 
-   intro.rst
+   usage.rst
    api.rst
    development.rst
    appendix.rst

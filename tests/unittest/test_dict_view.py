@@ -71,7 +71,7 @@ TESTCASES_DICTVIEW_INIT = [
     # * exp_warn_types: Expected warning type(s), or None.
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
-    # Empty original dictionaries
+    # Empty underlying dictionaries
     (
         "From empty dict as positional arg",
         dict(
@@ -103,7 +103,7 @@ TESTCASES_DICTVIEW_INIT = [
         None, None, True
     ),
 
-    # Non-empty original dictionaries
+    # Non-empty underlying dictionaries
     (
         "From non-empty dict as positional arg",
         dict(
@@ -361,9 +361,9 @@ TESTCASES_DICTVIEW_GETITEM = [
     # * exp_warn_types: Expected warning type(s), or None.
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
-    # Empty original dictionary
+    # Empty underlying dictionary
     (
-        "Empty original dict, with None key (not found)",
+        "Empty underlying dict, with None key (not found)",
         dict(
             obj=DictView({}),
             key=None,
@@ -372,7 +372,7 @@ TESTCASES_DICTVIEW_GETITEM = [
         KeyError, None, True
     ),
     (
-        "Empty original dict, with integer key (not found)",
+        "Empty underlying dict, with integer key (not found)",
         dict(
             obj=DictView({}),
             key=1234,
@@ -381,7 +381,7 @@ TESTCASES_DICTVIEW_GETITEM = [
         KeyError, None, True
     ),
     (
-        "Empty original dict, with empty string key (not found)",
+        "Empty underlying dict, with empty string key (not found)",
         dict(
             obj=DictView({}),
             key='',
@@ -390,7 +390,7 @@ TESTCASES_DICTVIEW_GETITEM = [
         KeyError, None, True
     ),
     (
-        "Empty original dict, with non-empty key (not found)",
+        "Empty underlying dict, with non-empty key (not found)",
         dict(
             obj=DictView({}),
             key='Dog',
@@ -399,9 +399,9 @@ TESTCASES_DICTVIEW_GETITEM = [
         KeyError, None, True
     ),
 
-    # Non-empty original dictionary
+    # Non-empty underlying dictionary
     (
-        "Non-empty original dict, with None key (not found)",
+        "Non-empty underlying dict, with None key (not found)",
         dict(
             obj=DictView(OrderedDict([('Dog', 'Cat'), ('Budgie', 'Fish')])),
             key=None,
@@ -410,7 +410,7 @@ TESTCASES_DICTVIEW_GETITEM = [
         KeyError, None, True
     ),
     (
-        "Non-empty original dict, with empty string key (not found)",
+        "Non-empty underlying dict, with empty string key (not found)",
         dict(
             obj=DictView(OrderedDict([('Dog', 'Cat'), ('Budgie', 'Fish')])),
             key='',
@@ -419,7 +419,7 @@ TESTCASES_DICTVIEW_GETITEM = [
         KeyError, None, True
     ),
     (
-        "Non-empty original dict, with non-existing key (not found)",
+        "Non-empty underlying dict, with non-existing key (not found)",
         dict(
             obj=DictView(OrderedDict([('Dog', 'Cat'), ('Budgie', 'Fish')])),
             key='invalid',
@@ -428,7 +428,7 @@ TESTCASES_DICTVIEW_GETITEM = [
         KeyError, None, True
     ),
     (
-        "Non-empty original dict, with existing key",
+        "Non-empty underlying dict, with existing key",
         dict(
             obj=DictView(OrderedDict([('Dog', 'Cat'), ('Budgie', 'Fish')])),
             key='Dog',
@@ -1454,16 +1454,16 @@ def test_DictView_copy(testcase, dictview):
     # Verify the result is a different object than the DictView
     assert id(dictview_copy) != id(dictview)
 
-    # Verify the new dictionary is a different object than the original
+    # Verify the new dictionary is a different object than the underlying
     # dictionary, if mutable
     if isinstance(dictview_dict, MutableMapping):
         assert id(dictview_copy_dict) != id(dictview_dict)
 
-    # Verify the new dictionary has the same type as the original dictionary
+    # Verify the new dictionary has the same type as the underlying dictionary
     # pylint: disable=unidiomatic-typecheck
     assert type(dictview_copy_dict) == type(dictview_dict)
 
-    # Verify the new dictionary is equal to the original dictionary
+    # Verify the new dictionary is equal to the underlying dictionary
     assert dictview_copy_dict == dictview_dict
 
 
