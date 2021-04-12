@@ -38,10 +38,19 @@ collection object will be visible in the view object.
 Creating an immutable view on a collection does not copy the collection and
 is therefore much faster than creating an immutable copy of the collection.
 
-This is useful if a method or function maintains data in form of a mutable
-collection and is intended to return that data but users should not be able to
-modify the data. The underlying collection can be updated by the method or
-function as needed, but the caller only gets an immutable view on it.
+The memory overhead of using immutable views is very small: An object
+of any of the view classes in the **immutable-views** package occupies 48 Bytes
+(measured in CPython 3.8 on macOS), and because the view object only has a
+reference to its underlying collection object, that size is independent of the
+number of items in the collection.
+
+The compute overhead is also very small, it is basically an additional function
+call to the corresponding function of the underlying collection.
+
+Immutable views are useful if a method or function maintains data in form of a
+mutable collection and is intended to return that data but users should not be
+able to modify the data. The underlying collection can be updated by the method
+or function as needed, but the caller only gets an immutable view on it.
 
 The view classes in the **immutable-views** package implement the complete
 behavior of the corresponding Python collection types except for any

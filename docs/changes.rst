@@ -24,6 +24,8 @@ Released: not yet
 
 * Removed dependency to 'six' package.
 
+* Stated the memory and compute overhead of using immutable view classes.
+
 **Cleanup:**
 
 * Docs: Simplified the introduction section.
