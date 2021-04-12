@@ -30,6 +30,9 @@ Released: not yet
 
 * Docs: Simplified the introduction section.
 
+* Docs: Removed INSTALL.md file to avoid duplicate information that can become
+  inconsistent.
+
 **Known issues:**
 
 * See `list of open issues`_.
