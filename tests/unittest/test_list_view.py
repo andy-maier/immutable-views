@@ -220,7 +220,11 @@ def test_ListView_init(testcase, init_args, init_kwargs):
     assert isinstance(listview, Sequence)
 
     # Verify the original list object's identity
-    assert listview_list is a_list_arg
+    if isinstance(a_list_arg, ListView):
+        # pylint: disable=protected-access
+        assert listview_list is a_list_arg._list
+    else:
+        assert listview_list is a_list_arg
 
 
 TESTCASES_LISTVIEW_REPR = [
@@ -1289,7 +1293,7 @@ TESTCASES_LISTVIEW_COMPARE = [
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
     (
-        "Compare empty ListView with empty ListView",
+        "Compare ListView of empty list with ListView of empty list",
         dict(
             obj1=ListView([]),
             obj2=ListView([]),
@@ -1300,10 +1304,10 @@ TESTCASES_LISTVIEW_COMPARE = [
         None, None, True
     ),
     (
-        "Compare empty ListView with empty list",
+        "Compare ListView of empty tuple with ListView of empty tuple",
         dict(
-            obj1=ListView([]),
-            obj2=list(),
+            obj1=ListView(tuple()),
+            obj2=ListView(tuple()),
             exp_eq=True,
             exp_gt=False,
             exp_lt=False,
@@ -1311,7 +1315,52 @@ TESTCASES_LISTVIEW_COMPARE = [
         None, None, True
     ),
     (
-        "Compare ListView with one item with equal ListView",
+        "Compare ListView of empty list with empty list",
+        dict(
+            obj1=ListView([]),
+            obj2=[],
+            exp_eq=True,
+            exp_gt=False,
+            exp_lt=False,
+        ),
+        None, None, True
+    ),
+    (
+        "Compare empty list with ListView of empty list",
+        dict(
+            obj1=[],
+            obj2=ListView([]),
+            exp_eq=True,
+            exp_gt=False,
+            exp_lt=False,
+        ),
+        None, None, True
+    ),
+    (
+        "Compare ListView of empty tuple with empty tuple",
+        dict(
+            obj1=ListView(tuple()),
+            obj2=tuple(),
+            exp_eq=True,
+            exp_gt=False,
+            exp_lt=False,
+        ),
+        None, None, True
+    ),
+    (
+        "Compare empty tuple with ListView of empty tuple",
+        dict(
+            obj1=tuple(),
+            obj2=ListView(tuple()),
+            exp_eq=True,
+            exp_gt=False,
+            exp_lt=False,
+        ),
+        None, None, True
+    ),
+
+    (
+        "Compare ListView of list with one item with equal ListView",
         dict(
             obj1=ListView(['Cat']),
             obj2=ListView(['Cat']),
@@ -1322,16 +1371,50 @@ TESTCASES_LISTVIEW_COMPARE = [
         None, None, True
     ),
     (
-        "Compare ListView with one item with equal list",
+        "Compare ListView of list with one item with equal list",
         dict(
             obj1=ListView(['Cat']),
-            obj2=list(['Cat']),
+            obj2=['Cat'],
             exp_eq=True,
             exp_gt=False,
             exp_lt=False,
         ),
         None, None, True
     ),
+    (
+        "Compare list with one item with equal ListView of list",
+        dict(
+            obj1=['Cat'],
+            obj2=ListView(['Cat']),
+            exp_eq=True,
+            exp_gt=False,
+            exp_lt=False,
+        ),
+        None, None, True
+    ),
+    (
+        "Compare ListView of tuple with one item with equal tuple",
+        dict(
+            obj1=ListView(('Cat',)),
+            obj2=('Cat',),
+            exp_eq=True,
+            exp_gt=False,
+            exp_lt=False,
+        ),
+        None, None, True
+    ),
+    (
+        "Compare tuple with one item with ListView of equal tuple",
+        dict(
+            obj1=('Cat',),
+            obj2=ListView(('Cat',)),
+            exp_eq=True,
+            exp_gt=False,
+            exp_lt=False,
+        ),
+        None, None, True
+    ),
+
     (
         "Compare ListView with one item with empty ListView (is greater than)",
         dict(
