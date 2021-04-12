@@ -38,6 +38,9 @@ DICT_WARNS_ORDER = sys.version_info[0:2] <= (3, 6)
 # Indicates Python dict supports the iter..() and view..() methods
 DICT_SUPPORTS_ITER_VIEW = sys.version_info[0:2] == (2, 7)
 
+# Indicates Python dict supports the has_key() method
+DICT_SUPPORTS_HAS_KEY = sys.version_info[0:2] == (2, 7)
+
 # Used as indicator not to pass an argument in the testcases.
 # Note this has nothing to do with the _OMITTED flag in _immutable_views.py and
 # could be a different value.
@@ -643,7 +646,7 @@ TESTCASES_DICTVIEW_HAS_KEY = [
             key=None,
             exp_result=False,
         ),
-        AttributeError if not PY2 else None, None, True
+        AttributeError if not DICT_SUPPORTS_HAS_KEY else None, None, True
     ),
     (
         "Empty dict, with integer key (no lower / success)",
@@ -652,7 +655,7 @@ TESTCASES_DICTVIEW_HAS_KEY = [
             key=1234,
             exp_result=False,
         ),
-        AttributeError if not PY2 else None, None, True
+        AttributeError if not DICT_SUPPORTS_HAS_KEY else None, None, True
     ),
     (
         "Empty dict, with empty string key (not found)",
@@ -661,7 +664,7 @@ TESTCASES_DICTVIEW_HAS_KEY = [
             key='',
             exp_result=False,
         ),
-        AttributeError if not PY2 else None, None, True
+        AttributeError if not DICT_SUPPORTS_HAS_KEY else None, None, True
     ),
     (
         "Empty dict, with non-empty key (not found)",
@@ -670,7 +673,7 @@ TESTCASES_DICTVIEW_HAS_KEY = [
             key='Dog',
             exp_result=False,
         ),
-        AttributeError if not PY2 else None, None, True
+        AttributeError if not DICT_SUPPORTS_HAS_KEY else None, None, True
     ),
 
     # Non-empty DictView
@@ -681,7 +684,7 @@ TESTCASES_DICTVIEW_HAS_KEY = [
             key=None,
             exp_result=False,
         ),
-        AttributeError if not PY2 else None, None, True
+        AttributeError if not DICT_SUPPORTS_HAS_KEY else None, None, True
     ),
     (
         "Non-empty dict, with empty string key (not found)",
@@ -690,7 +693,7 @@ TESTCASES_DICTVIEW_HAS_KEY = [
             key='',
             exp_result=False,
         ),
-        AttributeError if not PY2 else None, None, True
+        AttributeError if not DICT_SUPPORTS_HAS_KEY else None, None, True
     ),
     (
         "Non-empty dict, with non-empty key (not found)",
@@ -699,7 +702,7 @@ TESTCASES_DICTVIEW_HAS_KEY = [
             key='invalid',
             exp_result=False,
         ),
-        AttributeError if not PY2 else None, None, True
+        AttributeError if not DICT_SUPPORTS_HAS_KEY else None, None, True
     ),
     (
         "Non-empty dict, with existing key",
@@ -708,7 +711,7 @@ TESTCASES_DICTVIEW_HAS_KEY = [
             key='Dog',
             exp_result=True,
         ),
-        AttributeError if not PY2 else None, None, True
+        AttributeError if not DICT_SUPPORTS_HAS_KEY else None, None, True
     ),
 ]
 
