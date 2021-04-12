@@ -39,9 +39,9 @@ The classes and their usage
 The **immutable-views** package provides collection classes that are immutable
 views on other (mutable) collection objects:
 
-* :class:`immutable_views.DictView` - immutable view on another mapping (dictionary) object.
-* :class:`immutable_views.ListView` - immutable view on another sequence (list) object.
-* :class:`immutable_views.SetView` - immutable view on another set object.
+* :class:`~immutable_views.DictView` - immutable view on another mapping (dictionary) object.
+* :class:`~immutable_views.ListView` - immutable view on another sequence (list) object.
+* :class:`~immutable_views.SetView` - immutable view on another set object.
 
 An important behavior of views is that they are "live": Since the view classes
 delegate to the underlying collection, any modification of the underlying
