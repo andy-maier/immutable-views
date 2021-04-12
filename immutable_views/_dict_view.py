@@ -25,6 +25,9 @@ _DICT_SUPPORTS_ITER_VIEW = sys.version_info[0:2] == (2, 7)
 # Indicates Python dict supports the has_key() method
 _DICT_SUPPORTS_HAS_KEY = sys.version_info[0:2] == (2, 7)
 
+# Indicates Python dict supports the __or__/__ror__() methods
+_DICT_SUPPORTS_OR = sys.version_info[0:2] >= (3, 9)
+
 
 class DictView(Mapping):
     # pylint: disable=line-too-long
@@ -438,6 +441,56 @@ class DictView(Mapping):
         """
         return hash(self._dict)
 
+    def __or__(self, other):
+        """
+        ``self | other``:
+        Return a new view on the merged dictionary and other dictionary.
+
+        Added in Python 3.9.
+
+        The returned :class:`DictView` object is a view on a new dictionary
+        object of the type of the left hand operand that contains all the items
+        from the underlying dictionary of the left hand operand, updated by the
+        items from the other dictionary (or in case of a DictView, its
+        underlying dictionary).
+
+        The other object must be a :class:`dict` or :class:`DictView`.
+
+        The dictionary and the other dictionary are not changed.
+
+        Raises:
+          TypeError: The other object is not a dict or DictView.
+        """
+        # pylint: disable=protected-access
+        other_dict = other._dict if isinstance(other, DictView) else other
+        new_dict = self._dict | other_dict
+        return DictView(new_dict)
+
+    def __ror__(self, other):
+        """
+        ``other | self``:
+        Return a new view on the merged dictionary and other dictionary.
+
+        Added in Python 3.9.
+
+        This method is a fallback and is called only if the left operand does
+        not support the operation.
+
+        The returned :class:`DictView` object is a view on a new dictionary
+        object of the type of the left hand operand that contains all the items
+        from the underlying dictionary of the left hand operand, updated by the
+        items from the other dictionary (or in case of a DictView, its
+        underlying dictionary).
+
+        The other object must be a :class:`dict` or :class:`DictView`.
+
+        The dictionary and the other dictionary are not changed.
+
+        Raises:
+          TypeError: The other object is not a dict or DictView.
+        """
+        return self.__or__(other)
+
 
 # Remove methods that should be present only under certain conditions, and when
 # building the documentation.
@@ -452,3 +505,7 @@ if not _DICT_SUPPORTS_ITER_VIEW and not _BUILDING_DOCS:
 
 if not _DICT_SUPPORTS_HAS_KEY and not _BUILDING_DOCS:
     del DictView.has_key
+
+if not _DICT_SUPPORTS_OR and not _BUILDING_DOCS:
+    del DictView.__or__
+    del DictView.__ror__

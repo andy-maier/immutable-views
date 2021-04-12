@@ -29,6 +29,8 @@ Released: not yet
 * Added support for hashing, dependent on the hashability of the underlying
   collection. (issue #30)
 
+* Added OR (|) operator for DictView on Python 3.9. (issue #38)
+
 **Cleanup:**
 
 * Docs: Simplified the introduction section.
