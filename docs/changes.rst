@@ -20,6 +20,8 @@ Released: not yet
 
 **Enhancements:**
 
+* Removed dependency to 'six' package.
+
 **Cleanup:**
 
 * Docs: Simplified the introduction section.

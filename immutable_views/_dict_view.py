@@ -4,20 +4,26 @@ An immutable dictionary view.
 
 from __future__ import print_function, absolute_import
 
+import sys
 import os
 try:
     from collections.abc import Mapping
 except ImportError:
     # Python 2
     from collections import Mapping
-import six
 
 __all__ = ['DictView']
 
-# This env var is set when building the docs. It causes the methods
-# that are supposed to exist only in a particular Python version, not to be
-# removed, so they appear in the docs.
-BUILDING_DOCS = os.environ.get('BUILDING_DOCS', False)
+# This env var is set when building the docs. It causes the methods that are
+# supposed to exist only under certain circumstances, not to be removed, so
+# that they appear in the docs.
+_BUILDING_DOCS = os.environ.get('BUILDING_DOCS', False)
+
+# Indicates Python dict supports the iter..() and view..() methods
+_DICT_SUPPORTS_ITER_VIEW = sys.version_info[0:2] == (2, 7)
+
+# Indicates Python dict supports the has_key() method
+_DICT_SUPPORTS_HAS_KEY = sys.version_info[0:2] == (2, 7)
 
 
 class DictView(Mapping):
@@ -415,14 +421,16 @@ class DictView(Mapping):
         return self._dict <= other_dict
 
 
-# Remove methods that should only be present in a particular Python version
-# If the documentation is built, the methods are not removed in order to show
-# them in the documentation.
-if not six.PY2 and not BUILDING_DOCS:
-    del DictView.has_key
+# Remove methods that should only be present under certain circumstances,
+# except if the documentation is built.
+
+if not _DICT_SUPPORTS_ITER_VIEW and not _BUILDING_DOCS:
     del DictView.iterkeys
     del DictView.itervalues
     del DictView.iteritems
     del DictView.viewkeys
     del DictView.viewvalues
     del DictView.viewitems
+
+if not _DICT_SUPPORTS_HAS_KEY and not _BUILDING_DOCS:
+    del DictView.has_key

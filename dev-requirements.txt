@@ -102,6 +102,11 @@ readme-renderer>=23.0; python_version >= '3.5'
 
 # Indirect dependencies with special constraints:
 
+# six (also used by virtualenv, tox, probably others)
+# virtualenv 20.0 requires six>=1.12.0 on py>=3.8
+# tox 3.17 requires six>=1.14.0
+six>=1.14.0
+
 # pytz (used by TBD)
 pytz>=2016.10
 
