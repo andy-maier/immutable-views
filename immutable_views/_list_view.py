@@ -25,10 +25,20 @@ class ListView(Sequence):
     :class:`~py3:collections.abc.Sequence`, e.g. :class:`list`, :class:`tuple`,
     :class:`range`, or a user-defined class.
 
-    The view class supports the complete Python list behavior, except for
-    any operations that would modify the list. More precisely, the view
-    class supports all methods of :class:`~py3:collections.abc.Sequence`
-    (the methods are listed in the table at the top of the linked page).
+    This can be used for example when a class maintains a list that should
+    be made available to users of the class without allowing them to modify the
+    list.
+
+    In the description of this class, the term 'view' always refers to the
+    :class:`ListView` object, and the term 'list' or 'underlying list' refers
+    to the sequence object the view is based on.
+
+    The :class:`ListView` class supports the complete behavior of Python class
+    :class:`list`, except for any methods that would modify the list.
+    Note that the non-modifying methods of class :class:`list` are a superset of
+    the methods defined for the abstract class
+    :class:`~py3:collections.abc.Sequence` (the methods are listed in the table
+    at the top of the linked page).
 
     The view is "live": Since the view class delegates all operations to the
     underlying list, any modification of the underlying list object
