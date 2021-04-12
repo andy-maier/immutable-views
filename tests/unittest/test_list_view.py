@@ -67,7 +67,7 @@ TESTCASES_LISTVIEW_INIT = [
     # * exp_warn_types: Expected warning type(s), or None.
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
-    # Empty original sequences
+    # Empty underlying sequences
     (
         "From empty list as positional arg",
         dict(
@@ -109,7 +109,7 @@ TESTCASES_LISTVIEW_INIT = [
         None, None, True
     ),
 
-    # Non-empty original sequence
+    # Non-empty underlying sequence
     (
         "From non-empty list as positional arg",
         dict(
@@ -219,7 +219,7 @@ def test_ListView_init(testcase, init_args, init_kwargs):
     # Verify that ListView inherits from Sequence
     assert isinstance(listview, Sequence)
 
-    # Verify the original list object's identity
+    # Verify the underlying list object's identity
     if isinstance(a_list_arg, ListView):
         # pylint: disable=protected-access
         assert listview_list is a_list_arg._list
@@ -1002,7 +1002,7 @@ def test_ListView_iadd(testcase, listview, other, exp_result):
     # For details, see
     # https://docs.python.org/3/reference/datamodel.html#object.__iadd__.
     # For Listview, the `+=` operator results in a new ListView object on a new
-    # original list object.
+    # underlying list object.
     assert id(listview_copy) != listview_copy_id
 
     assert_equal(listview_copy, exp_result)
@@ -1193,7 +1193,7 @@ def test_ListView_imul(testcase, listview, number, exp_result):
     # For details, see
     # https://docs.python.org/3/reference/datamodel.html#object.__imul__.
     # For Listview, the `*=` operator results in a new ListView object on a new
-    # original list object.
+    # underlying list object.
     assert id(listview_copy) != listview_copy_id
 
     assert_equal(listview_copy, exp_result)
@@ -1784,16 +1784,16 @@ def test_ListView_copy(testcase, listview):
     # Verify the result is a different object than the ListView
     assert id(listview_copy) != id(listview)
 
-    # Verify the new list is a different object than the original list,
+    # Verify the new list is a different object than the underlying list,
     # if mutable
     if isinstance(listview_list, MutableSequence):
         assert id(listview_copy_list) != id(listview_list)
 
-    # Verify the new list has the same type as the original list
+    # Verify the new list has the same type as the underlying list
     # pylint: disable=unidiomatic-typecheck
     assert type(listview_copy_list) == type(listview_list)
 
-    # Verify the new list is equal to the original list
+    # Verify the new list is equal to the underlying list
     assert listview_copy_list == listview_list
 
 

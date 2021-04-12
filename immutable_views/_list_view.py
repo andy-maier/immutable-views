@@ -20,9 +20,10 @@ class ListView(Sequence):
 
     Derived from :class:`~py3:collections.abc.Sequence`.
 
-    This is an immutable view on an original (mutable)
-    :class:`~py3:collections.abc.Sequence` object, e.g. :class:`list` or
-    :class:`tuple`.
+    This class provides an immutable view on a possibly mutable sequence
+    object. The sequence object must be an instance of
+    :class:`~py3:collections.abc.Sequence`, e.g. :class:`list`, :class:`tuple`,
+    :class:`range`, or a user-defined class.
 
     The view class supports the complete Python list behavior, except for
     any operations that would modify the list. More precisely, the view
@@ -30,19 +31,21 @@ class ListView(Sequence):
     (the methods are listed in the table at the top of the linked page).
 
     The view is "live": Since the view class delegates all operations to the
-    original list, any modification of the original list object
+    underlying list, any modification of the underlying list object
     will be visible in the view object.
 
     Note that only the view object is immutable, not its items. So if the values
-    in the original list are mutable objects, they can be modified through the
+    in the underlying list are mutable objects, they can be modified through the
     view.
 
-    Note that in Python, augmented assignment (e.g. `+=` is not guaranteed to
-    modify the left hand object in place, but can result in a new object.
+    Note that in Python, augmented assignment (e.g. ``x += y``) is not
+    guaranteed to modify the left hand object in place, but can result in the
+    left hand name being bound to a new object (like in ``x = x + y``).
     For details, see
     `object.__iadd__() <https://docs.python.org/3/reference/datamodel.html#object.__iadd__>`_.
-    The `+=` operator on a left hand object that is a ListView object results
-    in a new ListView object on a new list object.
+
+    For the ListView class, augmented assignment is supported and results in
+    binding the left hand name to a new ListView object.
     """  # noqa: E501
     # pylint: enable=line-too-long
 
@@ -51,8 +54,8 @@ class ListView(Sequence):
         Parameters:
 
           a_list (:class:`~py3:collections.abc.Sequence`):
-            The original list.
-            If this object is a ListView, its original list is used.
+            The underlying list.
+            If this object is a ListView, its underlying list is used.
         """
         if not isinstance(a_list, Sequence):
             raise TypeError(
@@ -67,7 +70,7 @@ class ListView(Sequence):
         ``repr(self)``:
         Return a string representation of the view suitable for debugging.
 
-        The original list is represented using its ``repr()``
+        The underlying list is represented using its ``repr()``
         representation.
         """
         return "{0.__class__.__name__}({1!r})".format(self, self._list)
@@ -87,7 +90,7 @@ class ListView(Sequence):
         ``len(self)``:
         Return the number of items in the list.
 
-        The return value is the number of items in the original list.
+        The return value is the number of items in the underlying list.
         """
         return len(self._list)
 
@@ -96,7 +99,7 @@ class ListView(Sequence):
         ``value in self``:
         Return a boolean indicating whether the list contains a value.
 
-        The return value indicates whether the original list contains an
+        The return value indicates whether the underlying list contains an
         item that is equal to the value.
         """
         return value in self._list
@@ -114,8 +117,8 @@ class ListView(Sequence):
 
         The returned :class:`ListView` object is a view on a new list object of
         the type of the left hand operand that contains the items that are in
-        the original list of the left hand operand, concatenated with the
-        items in the other list (or in case of a ListView, its original list).
+        the underlying list of the left hand operand, concatenated with the
+        items in the other list (or in case of a ListView, its underlying list).
 
         The other object must be an :term:`py3:iterable` or :class:`ListView`.
 
@@ -136,7 +139,7 @@ class ListView(Sequence):
 
         The returned :class:`ListView` object is a view on a new list object of
         the type of the left hand operand that contains the items that are in
-        the original list of the left hand operand as many times as specified
+        the underlying list of the left hand operand as many times as specified
         by the right hand operand.
 
         A number <= 0 causes the returned list to be empty.
@@ -156,7 +159,7 @@ class ListView(Sequence):
 
         The returned :class:`ListView` object is a view on a new list object of
         the type of the right hand operand that contains the items that are in
-        the original list of the right hand operand as many times as specified
+        the underlying list of the right hand operand as many times as specified
         by the left hand operand.
 
         A number <= 0 causes the returned list to be empty.
@@ -170,7 +173,7 @@ class ListView(Sequence):
         ``reversed(self) ...``:
         Return an iterator through the list in reversed iteration order.
 
-        The returned iterator yields the items in the original list in the
+        The returned iterator yields the items in the underlying list in the
         reversed iteration order.
         """
         return reversed(self._list)
@@ -180,9 +183,9 @@ class ListView(Sequence):
         ``self == other``:
         Return a boolean indicating whether the list is equal to the other list.
 
-        The return value indicates whether the items in the original list are
+        The return value indicates whether the items in the underlying list are
         equal to the items in the other list (or in case of a ListView, its
-        original list).
+        underlying list).
 
         The other object must be a :class:`list` or :class:`ListView`.
 
@@ -199,9 +202,9 @@ class ListView(Sequence):
         Return a boolean indicating whether the list is not equal to the other
         list.
 
-        The return value indicates whether the items in the original list are
+        The return value indicates whether the items in the underlying list are
         not equal to the items in the other list (or in case of a ListView, its
-        original list).
+        underlying list).
 
         The other object must be a :class:`list` or :class:`ListView`.
 
@@ -219,8 +222,8 @@ class ListView(Sequence):
         Return a boolean indicating whether the list is greater than the other
         list.
 
-        The return value indicates whether the original list is greater than
-        the other list (or in case of a ListView, its original list), based on
+        The return value indicates whether the underlying list is greater than
+        the other list (or in case of a ListView, its underlying list), based on
         the lexicographical ordering Python defines for sequence types
         (see https://docs.python.org/3/tutorial/datastructures.html#comparing-sequences-and-other-types)
 
@@ -241,8 +244,8 @@ class ListView(Sequence):
         Return a boolean indicating whether the list is less than the other
         list.
 
-        The return value indicates whether the original list is less than
-        the other list (or in case of a ListView, its original list), based on
+        The return value indicates whether the underlying list is less than
+        the other list (or in case of a ListView, its underlying list), based on
         the lexicographical ordering Python defines for sequence types
         (see https://docs.python.org/3/tutorial/datastructures.html#comparing-sequences-and-other-types)
 
@@ -263,9 +266,10 @@ class ListView(Sequence):
         Return a boolean indicating whether the list is greater than or equal to
         the other list.
 
-        The return value indicates whether the original list is greater than or
-        equal to the other list (or in case of a ListView, its original list),
-        based on the lexicographical ordering Python defines for sequence types
+        The return value indicates whether the underlying list is greater than
+        or equal to the other list (or in case of a ListView, its underlying
+        list), based on the lexicographical ordering Python defines for sequence
+        types
         (see https://docs.python.org/3/tutorial/datastructures.html#comparing-sequences-and-other-types)
 
         The other object must be a :class:`list` or :class:`ListView`.
@@ -285,8 +289,8 @@ class ListView(Sequence):
         Return a boolean indicating whether the list is less than or equal to
         the other list.
 
-        The return value indicates whether the original list is less than or
-        equal to the other list (or in case of a ListView, its original list),
+        The return value indicates whether the underlying list is less than or
+        equal to the other list (or in case of a ListView, its underlying list),
         based on the lexicographical ordering Python defines for sequence types
         (see https://docs.python.org/3/tutorial/datastructures.html#comparing-sequences-and-other-types)
 
@@ -311,11 +315,12 @@ class ListView(Sequence):
         Return a new view on a shallow copy of the list.
 
         The returned :class:`ListView` object is a new view object on a list
-        object of the type of the original list.
+        object of the type of the underlying list.
 
         If the list type is immutable, the returned list object may be the
-        original list object. If the list type is mutable, the returned list is
-        a new list object that is a shallow copy of the original list object.
+        underlying list object. If the list type is mutable, the returned list
+        is a new list object that is a shallow copy of the underlying list
+        object.
         """
         org_class = self._list.__class__
         new_list = org_class(self._list)  # May be same object if immutable

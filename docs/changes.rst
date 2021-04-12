@@ -20,6 +20,8 @@ Released: not yet
 
 **Cleanup:**
 
+* Docs: Simplified the introduction section.
+
 **Known issues:**
 
 * See `list of open issues`_.

@@ -29,15 +29,16 @@ class DictView(Mapping):
 
     This class provides an immutable view on a possibly mutable mapping
     object. The mapping object must be an instance of
-    :class:`~py3:collections.abc.Mapping`.
+    :class:`~py3:collections.abc.Mapping`, e.g. :class:`dict`, or a
+    user-defined class.
 
     This can be used for example when a class maintains a dictionary that should
     be made available to users of the class without allowing them to modify the
     dictionary.
 
     In the description of this class, the term 'view' always refers to the
-    :class:`DictView` object, and the term 'dictionary' or 'original dictionary'
-    refers to the mapping object the view is based on.
+    :class:`DictView` object, and the term 'dictionary' or
+    'underlying dictionary' refers to the mapping object the view is based on.
 
     The :class:`DictView` class supports the complete behavior of Python class
     :class:`dict`, except for any methods that would modify the dictionary.
@@ -47,19 +48,21 @@ class DictView(Mapping):
     at the top of the linked page).
 
     The view is "live": Since the view class delegates all operations to the
-    original dictionary, any modification of the original dictionary object
+    underlying dictionary, any modification of the underlying dictionary object
     will be visible in the view object.
 
     Note that only the view object is immutable, not its items. So if the values
-    in the original dictionary are mutable objects, they can be modified through
-    the view.
+    in the underlying dictionary are mutable objects, they can be modified
+    through the view.
 
-    Note that in Python, augmented assignment (e.g. `+=` is not guaranteed to
-    modify the left hand object in place, but can result in a new object.
+    Note that in Python, augmented assignment (e.g. ``x += y``) is not
+    guaranteed to modify the left hand object in place, but can result in the
+    left hand name being bound to a new object (like in ``x = x + y``).
     For details, see
     `object.__iadd__() <https://docs.python.org/3/reference/datamodel.html#object.__iadd__>`_.
-    The `+=` operator on a left hand object that is a DictView object results
-    in a new DictView object on a new dictionary object.
+
+    For the DictView class, augmented assignment is supported and results in
+    binding the left hand name to a new DictView object.
     """  # noqa: E501
     # pylint: enable=line-too-long
 
@@ -68,8 +71,8 @@ class DictView(Mapping):
         Parameters:
 
           a_dict (:class:`~py3:collections.abc.Mapping`):
-            The original dictionary.
-            If this object is a DictView, its original dictionary is used.
+            The underlying dictionary.
+            If this object is a DictView, its underlying dictionary is used.
         """
         if not isinstance(a_dict, Mapping):
             raise TypeError(
@@ -84,7 +87,7 @@ class DictView(Mapping):
         ``repr(self)``:
         Return a string representation of the view suitable for debugging.
 
-        The original dictionary is represented using its ``repr()``
+        The underlying dictionary is represented using its ``repr()``
         representation.
         """
         return "{0.__class__.__name__}({1!r})".format(self, self._dict)
@@ -104,7 +107,7 @@ class DictView(Mapping):
         ``len(self)``:
         Return the number of items in the dictionary.
 
-        The return value is the number of items in the original dictionary.
+        The return value is the number of items in the underlying dictionary.
         """
         return len(self._dict)
 
@@ -113,7 +116,7 @@ class DictView(Mapping):
         ``value in self``:
         Return a boolean indicating whether the dictionary contains a value.
 
-        The return value indicates whether the original dictionary contains an
+        The return value indicates whether the underlying dictionary contains an
         item that is equal to the value.
         """
         return key in self._dict
@@ -123,8 +126,8 @@ class DictView(Mapping):
         ``reversed(self) ...``:
         Return an iterator through the dictionary in reversed iteration order.
 
-        The returned iterator yields the items in the original dictionary in the
-        reversed iteration order.
+        The returned iterator yields the items in the underlying dictionary in
+        the reversed iteration order.
         """
         return reversed(self._dict)
 
@@ -152,7 +155,7 @@ class DictView(Mapping):
         """
         Return the dictionary keys.
 
-        The keys of the original dictionary are returned in iteration order
+        The keys of the underlying dictionary are returned in iteration order
         and as a view in Python 3 and as a list in Python 2.
 
         See
@@ -166,7 +169,7 @@ class DictView(Mapping):
         """
         Return the dictionary values.
 
-        The values of the original dictionary are returned in iteration order
+        The values of the underlying dictionary are returned in iteration order
         and as a view in Python 3 and as a list in Python 2.
 
         See
@@ -180,7 +183,7 @@ class DictView(Mapping):
         """
         Return the dictionary items.
 
-        The items of the original dictionary are returned in iteration order
+        The items of the underlying dictionary are returned in iteration order
         and as a view in Python 3 and as a list in Python 2.
         Each returned item is a tuple of key and value.
 
@@ -223,7 +226,7 @@ class DictView(Mapping):
         """
         Python 2 only: Return a view on the dictionary keys.
 
-        The keys of the original dictionary are returned in iteration order
+        The keys of the underlying dictionary are returned in iteration order
         and as a view.
 
         See
@@ -240,7 +243,7 @@ class DictView(Mapping):
         """
         Python 2 only: Return a view on the dictionary values.
 
-        The values of the original dictionary are returned in iteration order
+        The values of the underlying dictionary are returned in iteration order
         and as a view.
 
         See
@@ -257,7 +260,7 @@ class DictView(Mapping):
         """
         Python 2 only: Return a view on the dictionary items.
 
-        The items of the original dictionary are returned in iteration order
+        The items of the underlying dictionary are returned in iteration order
         and as a view. Each returned item is a tuple of key and value.
 
         See
@@ -280,12 +283,12 @@ class DictView(Mapping):
         Return a new view on a shallow copy of the dictionary.
 
         The returned :class:`DictView` object is a new view object on a
-        dictionary object of the type of the original dictionary.
+        dictionary object of the type of the underlying dictionary.
 
         If the dictionary type is immutable, the returned dictionary object may
-        be the original dictionary object. If the dictionary type is mutable,
+        be the underlying dictionary object. If the dictionary type is mutable,
         the returned dictionary is a new dictionary object that is a shallow
-        copy of the original dictionary object.
+        copy of the underlying dictionary object.
         """
         org_class = self._dict.__class__
         new_dict = org_class(self._dict)  # May be same object if immutable
@@ -297,9 +300,9 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is equal to the
         other dictionary.
 
-        The return value indicates whether the items in the original dictionary
-        are equal to the items in the other dictionary (or in case of a
-        DictView, its original dictionary).
+        The return value indicates whether the items in the underlying
+        dictionary are equal to the items in the other dictionary (or in case
+        of a DictView, its underlying dictionary).
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
@@ -316,9 +319,9 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is not equal to the
         other dictionary.
 
-        The return value indicates whether the items in the original dictionary
-        are not equal to the items in the other dictionary (or in case of a
-        DictView, its original dictionary).
+        The return value indicates whether the items in the underlying
+        dictionary are not equal to the items in the other dictionary (or in
+        case of a DictView, its underlying dictionary).
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
@@ -335,9 +338,9 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is a proper superset
         of the other dictionary.
 
-        The return value indicates whether the original dictionary is a proper
-        superset of the other dictionary (or in case of a DictView, its original
-        dictionary).
+        The return value indicates whether the underlying dictionary is a proper
+        superset of the other dictionary (or in case of a DictView, its
+        underlying dictionary).
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
@@ -354,8 +357,8 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is a proper subset
         of the other dictionary.
 
-        The return value indicates whether the original dictionary is a proper
-        subset of the other dictionary (or in case of a DictView, its original
+        The return value indicates whether the underlying dictionary is a proper
+        subset of the other dictionary (or in case of a DictView, its underlying
         dictionary).
 
         The other object must be a :class:`dict` or :class:`DictView`.
@@ -374,8 +377,8 @@ class DictView(Mapping):
         superset of the other dictionary.
 
         The return value indicates whether every item in the other dictionary
-        (or in case of a DictView, its original dictionary) is in the original
-        dictionary.
+        (or in case of a DictView, its underlying dictionary) is in the
+        underlying dictionary.
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
@@ -392,9 +395,9 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is an inclusive
         subset of the other dictionary.
 
-        The return value indicates whether every item in the original
+        The return value indicates whether every item in the underlying
         dictionary is in the other dictionary (or in case of a DictView, its
-        original dictionary).
+        underlying dictionary).
 
         The other object must be a :class:`dict` or :class:`DictView`.
 

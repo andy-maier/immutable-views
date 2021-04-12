@@ -1,35 +1,47 @@
-immutable-views - Immutable views on other collection objects
-=============================================================
 
-.. image:: https://badge.fury.io/py/immutable-views.svg
-    :target: https://pypi.python.org/pypi/immutable-views/
-    :alt: Version on Pypi
+.. _`Usage`:
 
-.. image:: https://github.com/andy-maier/immutable-views/workflows/test/badge.svg?branch=master
-    :target: https://github.com/andy-maier/immutable-views/actions/
-    :alt: Actions status
-
-.. image:: https://readthedocs.org/projects/immutable-views/badge/?version=latest
-    :target: https://readthedocs.org/projects/immutable-views/builds/
-    :alt: Docs build status (master)
-
-.. image:: https://coveralls.io/repos/github/andy-maier/immutable-views/badge.svg?branch=master
-    :target: https://coveralls.io/github/andy-maier/immutable-views?branch=master
-    :alt: Test coverage (master)
+Usage
+=====
 
 
-Overview
---------
+.. _`Supported environments`:
+
+Supported environments
+----------------------
+
+The **immutable-views** package is supported in these environments:
+
+* Operating Systems: Linux, macOS / OS-X, native Windows, Linux subsystem in
+  Windows, UNIX-like environments in Windows.
+
+* Python: 2.7, 3.4, and higher
+
+
+.. _`Installation`:
+
+Installation
+------------
+
+The following command installs the **immutable-views** package and its
+prerequisite packages into the active Python environment:
+
+.. code-block:: bash
+
+    $ pip install immutable-views
+
+
+.. _`The classes and their usage`:
+
+The classes and their usage
+---------------------------
 
 The **immutable-views** package provides collection classes that are immutable
 views on other (mutable) collection objects:
 
-* `immutable_views.DictView <https://immutable-views.readthedocs.io/en/latest/api_dict_view.html>`_ -
-  immutable view on another mapping (dictionary) object.
-* `immutable_views.ListView <https://immutable-views.readthedocs.io/en/latest/api_list_view.html>`_ -
-  immutable view on another sequence (list) object.
-* `immutable_views.SetView <https://immutable-views.readthedocs.io/en/latest/api_set_view.html>`_ -
-  immutable view on another set object.
+* :class:`immutable_views.DictView` - immutable view on another mapping (dictionary) object.
+* :class:`immutable_views.ListView` - immutable view on another sequence (list) object.
+* :class:`immutable_views.SetView` - immutable view on another set object.
 
 An important behavior of views is that they are "live": Since the view classes
 delegate to the underlying collection, any modification of the underlying
@@ -143,25 +155,3 @@ other collections. Here is a notable subset of such packages:
 * `shoobx.immutable <https://pypi.org/project/shoobx.immutable/>`_
 * `immutable-collection <https://pypi.org/project/immutable-collection/>`_
 * `Dict-Path-Immutable <https://pypi.org/project/Dict-Path-Immutable/>`_
-
-
-.. _`Documentation and change log`:
-
-Documentation and change log
-----------------------------
-
-* `Documentation`_
-* `Change log`_
-
-
-License
--------
-
-The **immutable-views** project is provided under the
-`Apache Software License 2.0 <https://raw.githubusercontent.com/andy-maier/immutable-views/master/LICENSE>`_.
-
-
-.. # Links:
-
-.. _`Documentation`: https://immutable-views.readthedocs.io/en/stable/
-.. _`Change log`: https://immutable-views.readthedocs.io/en/stable/changes.html
