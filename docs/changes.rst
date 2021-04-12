@@ -16,6 +16,8 @@ Released: not yet
 
 **Bug fixes:**
 
+* Docs: Fixed description of DictView rich comparison methods. (issue #20)
+
 **Enhancements:**
 
 **Cleanup:**

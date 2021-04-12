@@ -300,9 +300,8 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is equal to the
         other dictionary.
 
-        The return value indicates whether the items in the underlying
-        dictionary are equal to the items in the other dictionary (or in case
-        of a DictView, its underlying dictionary).
+        Two dictionaries are equal if and only if all items in the dictionaries
+        match by their keys and matching items have equal values.
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
@@ -319,9 +318,8 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is not equal to the
         other dictionary.
 
-        The return value indicates whether the items in the underlying
-        dictionary are not equal to the items in the other dictionary (or in
-        case of a DictView, its underlying dictionary).
+        Two dictionaries are equal if and only if all items in the dictionaries
+        match by their keys and matching items have equal values.
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
@@ -335,17 +333,19 @@ class DictView(Mapping):
     def __gt__(self, other):
         """
         ``self > other``:
-        Return a boolean indicating whether the dictionary is a proper superset
-        of the other dictionary.
+        Return a boolean indicating whether the dictionary is greater than
+        the other dictionary.
 
-        The return value indicates whether the underlying dictionary is a proper
-        superset of the other dictionary (or in case of a DictView, its
-        underlying dictionary).
+        Whether such an ordering comparison is supported and what it means is
+        up to the underlying dictionary and the other dictionary. For example,
+        the standard Python :class:`dict` class rejects ordering comparisons
+        starting with Python 3.
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
         Raises:
           TypeError: The other object is not a dict or DictView.
+          TypeError: Operator not supported.
         """
         # pylint: disable=protected-access
         other_dict = other._dict if isinstance(other, DictView) else other
@@ -354,17 +354,19 @@ class DictView(Mapping):
     def __lt__(self, other):
         """
         ``self < other``:
-        Return a boolean indicating whether the dictionary is a proper subset
-        of the other dictionary.
+        Return a boolean indicating whether the dictionary is less than
+        the other dictionary.
 
-        The return value indicates whether the underlying dictionary is a proper
-        subset of the other dictionary (or in case of a DictView, its underlying
-        dictionary).
+        Whether such an ordering comparison is supported and what it means is
+        up to the underlying dictionary and the other dictionary. For example,
+        the standard Python :class:`dict` class rejects ordering comparisons
+        starting with Python 3.
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
         Raises:
           TypeError: The other object is dict a set or DictView.
+          TypeError: Operator not supported.
         """
         # pylint: disable=protected-access
         other_dict = other._dict if isinstance(other, DictView) else other
@@ -373,17 +375,19 @@ class DictView(Mapping):
     def __ge__(self, other):
         """
         ``self >= other``:
-        Return a boolean indicating whether the dictionary is an inclusive
-        superset of the other dictionary.
+        Return a boolean indicating whether the dictionary is greater than or
+        equal to the other dictionary.
 
-        The return value indicates whether every item in the other dictionary
-        (or in case of a DictView, its underlying dictionary) is in the
-        underlying dictionary.
+        Whether such an ordering comparison is supported and what it means is
+        up to the underlying dictionary and the other dictionary. For example,
+        the standard Python :class:`dict` class rejects ordering comparisons
+        starting with Python 3.
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
         Raises:
           TypeError: The other object is not a dict or DictView.
+          TypeError: Operator not supported.
         """
         # pylint: disable=protected-access
         other_dict = other._dict if isinstance(other, DictView) else other
@@ -392,17 +396,19 @@ class DictView(Mapping):
     def __le__(self, other):
         """
         ``self <= other``:
-        Return a boolean indicating whether the dictionary is an inclusive
-        subset of the other dictionary.
+        Return a boolean indicating whether the dictionary is less than or
+        equal to the other dictionary.
 
-        The return value indicates whether every item in the underlying
-        dictionary is in the other dictionary (or in case of a DictView, its
-        underlying dictionary).
+        Whether such an ordering comparison is supported and what it means is
+        up to the underlying dictionary and the other dictionary. For example,
+        the standard Python :class:`dict` class rejects ordering comparisons
+        starting with Python 3.
 
         The other object must be a :class:`dict` or :class:`DictView`.
 
         Raises:
           TypeError: The other object is not a dict or DictView.
+          TypeError: Operator not supported.
         """
         # pylint: disable=protected-access
         other_dict = other._dict if isinstance(other, DictView) else other
