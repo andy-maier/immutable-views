@@ -9,10 +9,10 @@ import re
 from collections import OrderedDict
 try:
     from collections.abc import KeysView, ValuesView, ItemsView, Iterator, \
-        MutableMapping
+        MutableMapping, Mapping
 except ImportError:
     from collections import KeysView, ValuesView, ItemsView, Iterator, \
-        MutableMapping
+        MutableMapping, Mapping
 import pytest
 from nocasedict import NocaseDict, HashableMixin
 
@@ -28,6 +28,34 @@ from immutable_views import DictView  # noqa: E402
 class HashableNocaseDict(HashableMixin, NocaseDict):
     """Hashable dictionary, for testing"""
     pass
+
+
+class NorDict(Mapping):
+    """Dictionary without OR operator, for testing"""
+
+    def __init__(self, a_dict=None):
+        if a_dict is None:
+            a_dict = {}
+        self._dict = dict(a_dict)
+
+    def __getitem__(self, key):
+        return self._dict[key]
+
+    def __iter__(self):
+        return iter(self._dict)
+
+    def __len__(self):
+        return len(self._dict)
+
+
+class OrDict(NorDict):
+    """Dictionary with OR operator, for testing"""
+
+    def __or__(self, other):
+        return self._dict | dict(other)
+
+    def __ror__(self, other):
+        return dict(other) | self._dict
 
 
 PY2 = sys.version_info[0] == 2
@@ -2058,61 +2086,135 @@ TESTCASES_DICTVIEW_OR = [
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
     (
-        "Empty dict and empty dict",
+        "DictView of empty NorDict and DictView of empty NorDict",
         dict(
-            obj1=DictView({}),
-            obj2=DictView({}),
-            exp_result=DictView({}),
+            obj1=DictView(NorDict()),
+            obj2=DictView(NorDict()),
+            exp_result=None,
+        ),
+        TypeError, None, True
+    ),
+    (
+        "DictView of empty OrDict and DictView of empty NorDict",
+        dict(
+            obj1=DictView(OrDict()),
+            obj2=DictView(NorDict()),
+            exp_result=DictView(OrDict()),
         ),
         None if DICT_SUPPORTS_OR else TypeError, None, True
     ),
     (
-        "Dict with two items and equal dict",
+        "DictView of empty NorDict and DictView of empty OrDict",
         dict(
-            obj1=DictView(OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
-            obj2=DictView(OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
-            exp_result=DictView(
-                OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+            obj1=DictView(NorDict()),
+            obj2=DictView(OrDict()),
+            exp_result=DictView(NorDict()),
         ),
         None if DICT_SUPPORTS_OR else TypeError, None, True
     ),
     (
-        "Empty dict and dict with two items",
+        "Empty NorDict and DictView of empty OrDict",
         dict(
-            obj1=DictView(OrderedDict()),
-            obj2=DictView(OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
-            exp_result=DictView(
-                OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+            obj1=NorDict(),
+            obj2=DictView(OrDict()),
+            exp_result=NorDict(),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+
+    (
+        "OrDict with two items and NorDict with equal two items",
+        dict(
+            obj1=DictView(OrDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+            obj2=DictView(NorDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+            exp_result=DictView(OrDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
         ),
         None if DICT_SUPPORTS_OR else TypeError, None, True
     ),
     (
-        "Dict with two items and empty dict",
+        "NorDict with two items and OrDict with equal two items",
         dict(
-            obj1=DictView(OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
-            obj2=DictView(OrderedDict()),
-            exp_result=DictView(
-                OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+            obj1=DictView(NorDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+            obj2=DictView(OrDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+            exp_result=DictView(NorDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+
+    (
+        "Empty OrDict and NorDict with two items",
+        dict(
+            obj1=DictView(OrDict()),
+            obj2=DictView(NorDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+            exp_result=DictView(OrDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
         ),
         None if DICT_SUPPORTS_OR else TypeError, None, True
     ),
     (
-        "Dict with one item and dict with one item with different key",
+        "Empty NorDict and OrDict with two items",
         dict(
-            obj1=DictView(OrderedDict([('Budgie', 'Fish')])),
-            obj2=DictView(OrderedDict([('Dog', 'Cat')])),
-            exp_result=DictView(
-                OrderedDict([('Budgie', 'Fish'), ('Dog', 'Cat')])),
+            obj1=DictView(NorDict()),
+            obj2=DictView(OrDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+            exp_result=DictView(NorDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+
+    (
+        "OrDict with two items and empty NorDict",
+        dict(
+            obj1=DictView(OrDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+            obj2=DictView(NorDict()),
+            exp_result=DictView(OrDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
         ),
         None if DICT_SUPPORTS_OR else TypeError, None, True
     ),
     (
-        "Dict with one item and dict with one item with same key, diff value",
+        "NorDict with two items and empty OrDict",
         dict(
-            obj1=DictView(OrderedDict([('Budgie', 'Fish')])),
-            obj2=DictView(OrderedDict([('Budgie', 'Cat')])),
-            exp_result=DictView(
-                OrderedDict([('Budgie', 'Cat')])),
+            obj1=DictView(NorDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+            obj2=DictView(OrDict()),
+            exp_result=DictView(NorDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+
+    (
+        "OrDict with one item and NorDict with one item with different key",
+        dict(
+            obj1=DictView(OrDict({'Budgie': 'Fish'})),
+            obj2=DictView(NorDict({'Dog': 'Cat'})),
+            exp_result=DictView(OrDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+    (
+        "NorDict with one item and OrDict with one item with different key",
+        dict(
+            obj1=DictView(NorDict({'Budgie': 'Fish'})),
+            obj2=DictView(OrDict({'Dog': 'Cat'})),
+            exp_result=DictView(NorDict({'Budgie': 'Fish', 'Dog': 'Cat'})),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+
+    (
+        "OrDict with one item and NorDict with one item with same key, "
+        "different value",
+        dict(
+            obj1=DictView(OrDict({'Budgie': 'Fish'})),
+            obj2=DictView(NorDict({'Budgie': 'Cat'})),
+            exp_result=DictView(NorDict({'Budgie': 'Cat'})),
+        ),
+        None if DICT_SUPPORTS_OR else TypeError, None, True
+    ),
+    (
+        "NorDict with one item and OrDict with one item with same key, "
+        "different value",
+        dict(
+            obj1=DictView(NorDict({'Budgie': 'Fish'})),
+            obj2=DictView(OrDict({'Budgie': 'Cat'})),
+            exp_result=DictView(NorDict({'Budgie': 'Cat'})),
         ),
         None if DICT_SUPPORTS_OR else TypeError, None, True
     ),
