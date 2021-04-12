@@ -76,6 +76,9 @@ DICT_SUPPORTS_ITER_VIEW = sys.version_info[0:2] == (2, 7)
 # Indicates Python dict supports the has_key() method
 DICT_SUPPORTS_HAS_KEY = sys.version_info[0:2] == (2, 7)
 
+# Indicates Python dict supports the __reversed__() method
+DICT_SUPPORTS_REVERSED = sys.version_info[0:2] >= (3, 8)
+
 # Indicates Python dict supports the __or__/__ror__() methods
 DICT_SUPPORTS_OR = sys.version_info[0:2] >= (3, 9)
 
@@ -790,26 +793,26 @@ TESTCASES_DICTVIEW_REVERSED = [
     (
         "Empty dict",
         dict(
-            obj=DictView(OrderedDict()),
+            obj=DictView({}),
             exp_keys=[],
         ),
-        None, None, True
+        None if DICT_SUPPORTS_REVERSED else TypeError, None, DICT_IS_ORDERED
     ),
     (
         "Dict with one item",
         dict(
-            obj=DictView(OrderedDict([('Dog', 'Cat')])),
+            obj=DictView({'Dog': 'Cat'}),
             exp_keys=['Dog'],
         ),
-        None, None, True
+        None if DICT_SUPPORTS_REVERSED else TypeError, None, DICT_IS_ORDERED
     ),
     (
         "Dict with two items",
         dict(
-            obj=DictView(OrderedDict([('Dog', 'Cat'), ('Budgie', 'Fish')])),
+            obj=DictView({'Dog': 'Cat', 'Budgie': 'Fish'}),
             exp_keys=['Budgie', 'Dog'],
         ),
-        None, None, True
+        None if DICT_SUPPORTS_REVERSED else TypeError, None, DICT_IS_ORDERED
     ),
 ]
 

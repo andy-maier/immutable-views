@@ -25,6 +25,9 @@ _DICT_SUPPORTS_ITER_VIEW = sys.version_info[0:2] == (2, 7)
 # Indicates Python dict supports the has_key() method
 _DICT_SUPPORTS_HAS_KEY = sys.version_info[0:2] == (2, 7)
 
+# Indicates Python dict supports the __reversed__() method
+_DICT_SUPPORTS_REVERSED = sys.version_info[0:2] >= (3, 8)
+
 # Indicates Python dict supports the __or__/__ror__() methods
 _DICT_SUPPORTS_OR = sys.version_info[0:2] >= (3, 9)
 
@@ -134,6 +137,8 @@ class DictView(Mapping):
         """
         ``reversed(self) ...``:
         Return an iterator through the dictionary in reversed iteration order.
+
+        Added in Python 3.8
 
         The returned iterator yields the items in the underlying dictionary in
         the reversed iteration order.
@@ -505,6 +510,9 @@ if not _DICT_SUPPORTS_ITER_VIEW and not _BUILDING_DOCS:
 
 if not _DICT_SUPPORTS_HAS_KEY and not _BUILDING_DOCS:
     del DictView.has_key
+
+if not _DICT_SUPPORTS_REVERSED and not _BUILDING_DOCS:
+    del DictView.__reversed__
 
 if not _DICT_SUPPORTS_OR and not _BUILDING_DOCS:
     del DictView.__or__

@@ -20,6 +20,8 @@ Released: not yet
 
 * Docs: Fixed development status of Pypi package to be Beta.
 
+* Fixed that there is no '__reversed__()' method on dict before Python 3.8.
+
 **Enhancements:**
 
 * Removed dependency to 'six' package.
