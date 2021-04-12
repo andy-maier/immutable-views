@@ -421,8 +421,8 @@ class DictView(Mapping):
         return self._dict <= other_dict
 
 
-# Remove methods that should only be present under certain circumstances,
-# except if the documentation is built.
+# Remove methods that should be present only under certain conditions, and when
+# building the documentation.
 
 if not _DICT_SUPPORTS_ITER_VIEW and not _BUILDING_DOCS:
     del DictView.iterkeys
