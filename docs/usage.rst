@@ -65,7 +65,7 @@ collection implementation (i.e. not just the standard Python collection
 classes).
 
 Note that the immutability of the view objects only applies to the view object
-itself and to its underlying collection, but not to the items in the unerlying
+itself and to its underlying collection, but not to the items in the underlying
 collection. So if the underlying collection contains mutable objects, they will
 still be mutable when accessed through the view objects.
 
