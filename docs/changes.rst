@@ -18,6 +18,8 @@ Released: not yet
 
 * Docs: Fixed description of DictView rich comparison methods. (issue #20)
 
+* Docs: Fixed development status of Pypi package to be Beta.
+
 **Enhancements:**
 
 * Removed dependency to 'six' package.
