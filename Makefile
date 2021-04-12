@@ -420,7 +420,7 @@ all: develop check pylint build builddoc test installtest
 clobber: clean
 	@echo "Makefile: Removing everything for a fresh start"
 	-$(call RM_FUNC,*.done $(dist_files) $(dist_dir)/$(package_name)-$(package_version)*.egg $(package_name)/*cover)
-	-$(call RMDIR_FUNC,$(doc_build_dir) .tox $(coverage_html_dir) $(package_name).egg-info)
+	-$(call RMDIR_FUNC,$(doc_build_dir) .pytest_cache .tox $(coverage_html_dir) $(package_name).egg-info)
 	@echo "Makefile: Done removing everything for a fresh start"
 	@echo "Makefile: Target $@ done."
 
