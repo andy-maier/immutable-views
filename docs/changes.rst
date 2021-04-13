@@ -44,6 +44,8 @@ Released: not yet
 
 * Added OR (|) operator for DictView on Python 3.9. (issue #38)
 
+* Added tests for pickling DictView. (issue #47)
+
 **Cleanup:**
 
 * Docs: Simplified the introduction section.
