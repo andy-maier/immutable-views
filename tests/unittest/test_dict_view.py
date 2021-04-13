@@ -37,7 +37,7 @@ from immutable_views import DictView  # noqa: E402
 # pylint: enable=wrong-import-position, wrong-import-order, invalid-name
 
 
-class HashableNocaseDict(HashableMixin, NocaseDict):
+class HashableDict(HashableMixin, NocaseDict):
     """Hashable dictionary, for testing"""
     pass
 
@@ -1740,6 +1740,61 @@ TESTCASES_DICTVIEW_EQUAL = [
         ),
         TypeError, None, True
     ),
+
+    (
+        "Mixing types: DictView of dict and dict",
+        dict(
+            obj1=DictView(dict({'Dog': 'Cat'})),
+            obj2=dict({'Dog': 'Cat'}),
+            exp_obj_equal=True,
+        ),
+        None, None, True
+    ),
+    (
+        "Mixing types: dict and DictView of dict",
+        dict(
+            obj1=dict({'Dog': 'Cat'}),
+            obj2=DictView(dict({'Dog': 'Cat'})),
+            exp_obj_equal=True,
+        ),
+        None, None, True
+    ),
+    (
+        "Mixing types: DictView of dict and OrDict (not a dict)",
+        dict(
+            obj1=DictView(dict({'Dog': 'Cat'})),
+            obj2=OrDict({'Dog': 'Cat'}),
+            exp_obj_equal=True,
+        ),
+        None, None, True
+    ),
+    (
+        "Mixing types: dict and DictView of OrDict (not a dict)",
+        dict(
+            obj1=dict({'Dog': 'Cat'}),
+            obj2=DictView(OrDict({'Dog': 'Cat'})),
+            exp_obj_equal=True,
+        ),
+        None, None, True
+    ),
+    (
+        "Mixing types: DictView of OrDict (not a dict) and DictView of dict",
+        dict(
+            obj1=DictView(OrDict({'Dog': 'Cat'})),
+            obj2=DictView(dict({'Dog': 'Cat'})),
+            exp_obj_equal=True,
+        ),
+        None, None, True
+    ),
+    (
+        "Mixing types: DictView of dict and DictView of OrDict (not a dict)",
+        dict(
+            obj1=DictView(dict({'Dog': 'Cat'})),
+            obj2=DictView(OrDict({'Dog': 'Cat'})),
+            exp_obj_equal=True,
+        ),
+        None, None, True
+    ),
 ]
 
 
@@ -2030,9 +2085,9 @@ TESTCASES_DICTVIEW_HASH = [
         TypeError, None, True
     ),
     (
-        "Empty HashableNocaseDict",
+        "Empty HashableDict",
         dict(
-            dict_obj=HashableNocaseDict(),
+            dict_obj=HashableDict(),
         ),
         None, None, True
     ),
@@ -2052,9 +2107,9 @@ TESTCASES_DICTVIEW_HASH = [
         TypeError, None, True
     ),
     (
-        "HashableNocaseDict with one item",
+        "HashableDict with one item",
         dict(
-            dict_obj=HashableNocaseDict([('a', 1)]),
+            dict_obj=HashableDict([('a', 1)]),
         ),
         None, None, True
     ),

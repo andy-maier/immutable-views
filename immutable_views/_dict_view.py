@@ -119,10 +119,10 @@ class DictView(Mapping):
     def __getitem__(self, key):
         """
         ``self[key]``:
-        Return the value of the dictionary item with an existing key.
+        Return the value of the dictionary item with a key.
 
         Raises:
-          KeyError: Key does not exist.
+          KeyError: An item with the key does not exist.
         """
         return self._dict[key]
 
@@ -138,36 +138,37 @@ class DictView(Mapping):
     def __contains__(self, key):
         """
         ``value in self``:
-        Return a boolean indicating whether the dictionary contains a value.
+        Return a boolean indicating whether the dictionary contains an item with
+        a key.
 
         The return value indicates whether the underlying dictionary contains an
-        item that is equal to the value.
+        item that has the specified key.
         """
         return key in self._dict
 
     def __reversed__(self):
         """
         ``reversed(self) ...``:
-        Return an iterator through the dictionary in reversed iteration order.
+        Return an iterator through the dictionary keys in reversed iteration
+        order.
 
-        Added in Python 3.8
+        Added in Python 3.8.
 
-        The returned iterator yields the items in the underlying dictionary in
-        the reversed iteration order.
+        The returned iterator yields the keys in the underlying dictionary in
+        reversed iteration order.
         """
         return reversed(self._dict)
 
     def get(self, key, default=None):
         """
-        Return the value of the dictionary item with an existing key or a
-        default value.
+        Return the value of the dictionary item with a key or a default value.
         """
         return self._dict.get(key, default)
 
     def has_key(self, key):
         """
         Python 2 only: Return a boolean indicating whether the dictionary
-        contains an item with the key.
+        contains an item with a key.
 
         Raises:
           AttributeError: The method does not exist on Python 3.
@@ -179,10 +180,10 @@ class DictView(Mapping):
     def keys(self):
         # pylint: disable=line-too-long
         """
-        Return the dictionary keys.
+        Return the dictionary keys in iteration order.
 
-        The keys of the underlying dictionary are returned in iteration order
-        and as a view in Python 3 and as a list in Python 2.
+        The keys of the underlying dictionary are returned as a view in
+        Python 3 and as a list in Python 2.
 
         See
         `Dictionary View Objects on Python 3 <https://docs.python.org/3/library/stdtypes.html#dictionary-view-objects>`_ for details about view objects.
@@ -193,10 +194,10 @@ class DictView(Mapping):
     def values(self):
         # pylint: disable=line-too-long
         """
-        Return the dictionary values.
+        Return the dictionary values in iteration order.
 
-        The values of the underlying dictionary are returned in iteration order
-        and as a view in Python 3 and as a list in Python 2.
+        The values of the underlying dictionary are returned as a view in
+        Python 3 and as a list in Python 2.
 
         See
         `Dictionary View Objects on Python 3 <https://docs.python.org/3/library/stdtypes.html#dictionary-view-objects>`_ for details about view objects.
@@ -207,11 +208,11 @@ class DictView(Mapping):
     def items(self):
         # pylint: disable=line-too-long
         """
-        Return the dictionary items.
+        Return the dictionary items in iteration order.
 
-        The items of the underlying dictionary are returned in iteration order
-        and as a view in Python 3 and as a list in Python 2.
         Each returned item is a tuple of key and value.
+        The items of the underlying dictionary are returned as a view in
+        Python 3 and as a list in Python 2.
 
         See
         `Dictionary View Objects on Python 3 <https://docs.python.org/3/library/stdtypes.html#dictionary-view-objects>`_ for details about view objects.
@@ -221,7 +222,8 @@ class DictView(Mapping):
 
     def iterkeys(self):
         """
-        Python 2 only: Return an iterator through the dictionary keys.
+        Python 2 only: Return an iterator through the dictionary keys in
+        iteration order.
 
         Raises:
           AttributeError: The method does not exist on Python 3.
@@ -230,7 +232,8 @@ class DictView(Mapping):
 
     def itervalues(self):
         """
-        Python 2 only: Return an iterator through the dictionary values.
+        Python 2 only: Return an iterator through the dictionary values in
+        iteration order.
 
         Raises:
           AttributeError: The method does not exist on Python 3.
@@ -239,7 +242,9 @@ class DictView(Mapping):
 
     def iteritems(self):
         """
-        Python 2 only: Return an iterator through the dictionary items.
+        Python 2 only: Return an iterator through the dictionary items in
+        iteration order.
+
         Each item is a tuple of key and value.
 
         Raises:
@@ -250,10 +255,9 @@ class DictView(Mapping):
     def viewkeys(self):
         # pylint: disable=line-too-long
         """
-        Python 2 only: Return a view on the dictionary keys.
+        Python 2 only: Return a view on the dictionary keys in iteration order.
 
-        The keys of the underlying dictionary are returned in iteration order
-        and as a view.
+        The keys of the underlying dictionary are returned as a view.
 
         See
         `Dictionary View Objects on Python 2 <https://docs.python.org/2/library/stdtypes.html#dictionary-view-objects>`_ for details about view objects.
@@ -267,10 +271,10 @@ class DictView(Mapping):
     def viewvalues(self):
         # pylint: disable=line-too-long
         """
-        Python 2 only: Return a view on the dictionary values.
+        Python 2 only: Return a view on the dictionary values in iteration
+        order.
 
-        The values of the underlying dictionary are returned in iteration order
-        and as a view.
+        The values of the underlying dictionary are returned as a view.
 
         See
         `Dictionary View Objects on Python 2 <https://docs.python.org/2/library/stdtypes.html#dictionary-view-objects>`_ for details about view objects.
@@ -284,10 +288,10 @@ class DictView(Mapping):
     def viewitems(self):
         # pylint: disable=line-too-long
         """
-        Python 2 only: Return a view on the dictionary items.
+        Python 2 only: Return a view on the dictionary items in iteration order.
 
-        The items of the underlying dictionary are returned in iteration order
-        and as a view. Each returned item is a tuple of key and value.
+        Each returned item is a tuple of key and value.
+        The items of the underlying dictionary are returned as a view.
 
         See
         `Dictionary View Objects on Python 2 <https://docs.python.org/2/library/stdtypes.html#dictionary-view-objects>`_ for details about view objects.
@@ -300,7 +304,7 @@ class DictView(Mapping):
 
     def __iter__(self):
         """
-        Return an iterator through the dictionary keys.
+        Return an iterator through the dictionary keys in iteration order.
         """
         return iter(self._dict)
 
@@ -324,15 +328,11 @@ class DictView(Mapping):
         """
         ``self == other``:
         Return a boolean indicating whether the dictionary is equal to the
-        other dictionary.
+        other object.
 
-        Two dictionaries are equal if and only if all items in the dictionaries
-        match by their keys and matching items have equal values.
-
-        The other object must be a :class:`dict` or :class:`DictView`.
-
-        Raises:
-          TypeError: The other object is not a dict or DictView.
+        Compared are the underlying dictionary of the left hand view object
+        and the right hand object (or in case of a DictView, its underlying
+        dictionary).
         """
         # pylint: disable=protected-access
         other_dict = other._dict if isinstance(other, DictView) else other
@@ -344,13 +344,9 @@ class DictView(Mapping):
         Return a boolean indicating whether the dictionary is not equal to the
         other dictionary.
 
-        Two dictionaries are equal if and only if all items in the dictionaries
-        match by their keys and matching items have equal values.
-
-        The other object must be a :class:`dict` or :class:`DictView`.
-
-        Raises:
-          TypeError: The other object is not a dict or DictView.
+        Compared are the underlying dictionary of the left hand view object
+        and the right hand object (or in case of a DictView, its underlying
+        dictionary).
         """
         # pylint: disable=protected-access
         other_dict = other._dict if isinstance(other, DictView) else other
