@@ -18,6 +18,7 @@ from __future__ import absolute_import
 
 import sys
 import re
+import pickle
 from collections import OrderedDict
 try:
     from collections.abc import KeysView, ValuesView, ItemsView, Iterator, \
@@ -2056,6 +2057,62 @@ def test_DictView_ordering(testcase, obj1, obj2, op, exp_result):
     assert testcase.exp_exc_types is None
 
     assert result == exp_result
+
+
+TESTCASES_DICTVIEW_PICKLE = [
+
+    # Testcases for pickling and unpickling DictView objects
+
+    # Each list item is a testcase tuple with these items:
+    # * desc: Short testcase description.
+    # * kwargs: Keyword arguments for the test function:
+    #   * dictview: DictView object to be used for the test.
+    # * exp_exc_types: Expected exception type(s), or None.
+    # * exp_warn_types: Expected warning type(s), or None.
+    # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
+
+    (
+        "Empty dict",
+        dict(
+            dictview=DictView({}),
+        ),
+        None, None, True
+    ),
+    (
+        "Dict with one item",
+        dict(
+            dictview=DictView({'Dog': 'Cat'}),
+        ),
+        None, None, True
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "desc, kwargs, exp_exc_types, exp_warn_types, condition",
+    TESTCASES_DICTVIEW_PICKLE)
+@simplified_test_function
+def test_DictView_pickle(testcase, dictview):
+    """
+    Test function for pickling and unpickling DictView objects
+    """
+
+    # Don't change the testcase data, but a copy
+    dictview_copy = DictView(dictview)
+
+    # Pickle the object
+    pkl = pickle.dumps(dictview_copy)
+
+    del dictview_copy
+
+    # Unpickle the object
+    dictview2 = pickle.loads(pkl)
+
+    # Ensure that exceptions raised in the remainder of this function
+    # are not mistaken as expected exceptions
+    assert testcase.exp_exc_types is None
+
+    assert dictview2 == dictview
 
 
 TESTCASES_DICTVIEW_HASH = [
