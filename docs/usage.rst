@@ -89,6 +89,22 @@ itself and to its underlying collection, but not to the items in the underlying
 collection. So if the underlying collection contains mutable objects, they will
 still be mutable when accessed through the view objects.
 
+The standard Python class
+`types.MappingProxyType <https://docs.python.org/3/library/types.html#types.MappingProxyType>`_
+serves the same purpose as the
+:class:`~immutable_views.DictView`
+class but it does not support pickling or hashing and was added only in
+Python 3.3.
+The ``dictproxy`` class from the
+`dictproxyhack <https://pypi.org/project/dictproxyhack/>`_
+package on Pypi supports Python 2 and Python 3 and uses Python classes where
+available (e.g. ``MappingProxyType`` on Python 3.3 and later, and the internal
+``mappingproxy`` class used for ``__dict__`` on CPython) but also does not
+support pickling or hashing.
+The lack of support for standard dictionary behaviors prevents their use in
+cases where the view class is used as a read-only replacement for the standard
+dictionary.
+
 Note that there are several packages on Pypi that provide immutable
 collections, but they all are collections on their own, and not views on
 other collections. Here is a notable subset of such packages:
