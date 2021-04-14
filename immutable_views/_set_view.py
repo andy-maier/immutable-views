@@ -85,6 +85,17 @@ class SetView(Set):
             a_set = a_set._set
         self._set = a_set
 
+    @property
+    def set(self):
+        """
+        The underlying set.
+
+        Access to the underlying set is provided for purposes such as
+        conversion to JSON or other cases where the view classes do not work.
+        This access should not be used to modify the underlying set.
+        """
+        return self._set
+
     def __repr__(self):
         """
         ``repr(self)``:

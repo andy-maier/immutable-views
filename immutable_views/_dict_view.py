@@ -106,6 +106,17 @@ class DictView(Mapping):
             a_dict = a_dict._dict
         self._dict = a_dict
 
+    @property
+    def dict(self):
+        """
+        The underlying dictionary.
+
+        Access to the underlying dictionary is provided for purposes such as
+        conversion to JSON or other cases where the view classes do not work.
+        This access should not be used to modify the underlying dictionary.
+        """
+        return self._dict
+
     def __repr__(self):
         """
         ``repr(self)``:

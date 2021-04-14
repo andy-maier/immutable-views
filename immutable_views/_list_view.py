@@ -87,6 +87,17 @@ class ListView(Sequence):
             a_list = a_list._list
         self._list = a_list
 
+    @property
+    def list(self):
+        """
+        The underlying list.
+
+        Access to the underlying list is provided for purposes such as
+        conversion to JSON or other cases where the view classes do not work.
+        This access should not be used to modify the underlying list.
+        """
+        return self._list
+
     def __repr__(self):
         """
         ``repr(self)``:

@@ -1493,12 +1493,12 @@ def test_DictView_copy(testcase, dictview):
     Test function for DictView.copy()
     """
 
-    dictview_dict = dictview._dict  # pylint: disable=protected-access
+    dictview_dict = dictview.dict
 
     # The code to be tested
     dictview_copy = dictview.copy()
 
-    dictview_copy_dict = dictview_copy._dict  # pylint: disable=protected-access
+    dictview_copy_dict = dictview_copy.dict
 
     # Ensure that exceptions raised in the remainder of this function
     # are not mistaken as expected exceptions
