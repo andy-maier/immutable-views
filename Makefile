@@ -570,6 +570,8 @@ ifeq ($(python_mn_version),py34)
 	@echo "Makefile: Done running unit tests (without coverage)"
 else
 	@echo "Makefile: Running unit tests (with coverage)"
+	-$(call RM_FUNC,.coverage)
+	-$(call RMDIR_FUNC,$(coverage_html_dir))
 	coverage run --source=$(package_name) --rcfile=.coveragerc -m pytest --color=yes $(pytest_warning_opts) $(pytest_opts) $(test_dir)/unittest -s
 	coverage report --rcfile=.coveragerc
 	coverage html --rcfile=.coveragerc --dir $(coverage_html_dir)
