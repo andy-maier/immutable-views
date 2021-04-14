@@ -44,6 +44,34 @@ LIST_HAS_CLEAR = sys.version_info[0] == 3
 DICT_PRESERVES_ORDER = sys.version_info[0:2] >= (3, 7)
 
 
+class DerivedSet(set):
+    """Set derived from set with additional attribute"""
+
+    def __init__(self, *args, **kwargs):
+        super(DerivedSet, self).__init__(*args, **kwargs)
+        self._dummy = 'dummy'
+
+    def __eq__(self, other):
+        super_equal = super(DerivedSet, self).__eq__(other)
+        if isinstance(other, DerivedSet):
+            return super_equal and self._dummy == other._dummy
+        return super_equal
+
+
+class DerivedSetView(SetView):
+    """Set view derived from SetView with additional attribute"""
+
+    def __init__(self, *args, **kwargs):
+        super(DerivedSetView, self).__init__(*args, **kwargs)
+        self._dummy = 'dummy'
+
+    def __eq__(self, other):
+        super_equal = super(DerivedSetView, self).__eq__(other)
+        if isinstance(other, DerivedSetView):
+            return super_equal and self._dummy == other._dummy
+        return super_equal
+
+
 def assert_equal(set1, set2):
     """
     Assert that set1 is equal to set2.
@@ -3430,16 +3458,30 @@ TESTCASES_SETVIEW_PICKLE = [
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
     (
-        "Empty list",
+        "SetView of empty set",
         dict(
             setview=SetView(set()),
         ),
         None, None, True
     ),
     (
-        "List with two items",
+        "SetView of set with two items",
         dict(
             setview=SetView({'Dog', 'Cat'}),
+        ),
+        None, None, True
+    ),
+    (
+        "SetView of DerivedSet with two items",
+        dict(
+            setview=SetView(DerivedSet({'Dog', 'Cat'})),
+        ),
+        None, None, True
+    ),
+    (
+        "DerivedSetView of set with two items",
+        dict(
+            setview=DerivedSetView({'Dog', 'Cat'}),
         ),
         None, None, True
     ),
@@ -3455,13 +3497,8 @@ def test_SetView_pickle(testcase, setview):
     Test function for pickling and unpickling SetView objects
     """
 
-    # Don't change the testcase data, but a copy
-    setview_copy = SetView(setview)
-
     # Pickle the object
-    pkl = pickle.dumps(setview_copy)
-
-    del setview_copy
+    pkl = pickle.dumps(setview)
 
     # Unpickle the object
     setview2 = pickle.loads(pkl)

@@ -46,7 +46,11 @@ Released: not yet
 
 * Added tests for pickling DictView. (issue #47)
 
-* Added access to the underlying objects via a property.
+* Added access to the underlying collections via a property.
+
+* The view classes now use slots for the underlying collection.
+  This improves performance and reduces the view object memory size from 48
+  Bytes to 40 Bytes. (issue #51)
 
 **Cleanup:**
 

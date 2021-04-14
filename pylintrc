@@ -68,8 +68,8 @@ disable=I0011,
         wildcard-import, unused-wildcard-import,
         locally-enabled, superfluous-parens, useless-object-inheritance,
         consider-using-set-comprehension, unnecessary-pass, useless-return,
-        bad-option-value,
-        R0801
+        bad-option-value, super-with-arguments,
+        R0801        
 
 # TODO: R0801 was added due to https://github.com/PyCQA/pylint/issues/4118.
 #       Remove it again once fixed.
