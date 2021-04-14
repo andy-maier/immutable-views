@@ -71,6 +71,8 @@ class ListView(Sequence):
     """  # noqa: E501
     # pylint: enable=line-too-long
 
+    __slots__ = ['_list']
+
     def __init__(self, a_list):
         """
         Parameters:
@@ -107,6 +109,27 @@ class ListView(Sequence):
         representation.
         """
         return "{0.__class__.__name__}({1!r})".format(self, self._list)
+
+    def __getstate__(self):
+        """Support for pickling."""
+        # Needed on Python 2 due to the use of slots
+        a_dict = dict()
+        for attr in self.__slots__:
+            a_dict[attr] = getattr(self, attr)
+
+        # Support for objects that also have __dict__, e.g. user defined
+        # derived classes that did not define __slots__:
+        if hasattr(self, '__dict__'):
+            for attr in self.__dict__:
+                a_dict[attr] = getattr(self, attr)
+
+        return a_dict
+
+    def __setstate__(self, a_dict):
+        """Support for unpickling."""
+        # Needed on Python 2 due to the use of slots
+        for attr in a_dict:
+            setattr(self, attr, a_dict[attr])
 
     def __getitem__(self, index):
         """

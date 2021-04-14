@@ -71,6 +71,34 @@ class OrDict(NorDict):
         return dict(other) | self._dict
 
 
+class DerivedDict(dict):
+    """Dictionary derived from dict with additional attribute"""
+
+    def __init__(self, *args, **kwargs):
+        super(DerivedDict, self).__init__(*args, **kwargs)
+        self._dummy = 'dummy'
+
+    def __eq__(self, other):
+        super_equal = super(DerivedDict, self).__eq__(other)
+        if isinstance(other, DerivedDict):
+            return super_equal and self._dummy == other._dummy
+        return super_equal
+
+
+class DerivedDictView(DictView):
+    """Dictionary view derived from DictView with additional attribute"""
+
+    def __init__(self, *args, **kwargs):
+        super(DerivedDictView, self).__init__(*args, **kwargs)
+        self._dummy = 'dummy'
+
+    def __eq__(self, other):
+        super_equal = super(DerivedDictView, self).__eq__(other)
+        if isinstance(other, DerivedDictView):
+            return super_equal and self._dummy == other._dummy
+        return super_equal
+
+
 PY2 = sys.version_info[0] == 2
 
 # Indicates Python dict supports lt/gt comparison (between dicts)
@@ -2072,16 +2100,30 @@ TESTCASES_DICTVIEW_PICKLE = [
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
     (
-        "Empty dict",
+        "DictView of empty dict",
         dict(
             dictview=DictView({}),
         ),
         None, None, True
     ),
     (
-        "Dict with one item",
+        "DictView of dict with one item",
         dict(
             dictview=DictView({'Dog': 'Cat'}),
+        ),
+        None, None, True
+    ),
+    (
+        "DictView of DerivedDict with one item",
+        dict(
+            dictview=DictView(DerivedDict({'Dog': 'Cat'})),
+        ),
+        None, None, True
+    ),
+    (
+        "DerivedDictView of dict with one item",
+        dict(
+            dictview=DerivedDictView(dict({'Dog': 'Cat'})),
         ),
         None, None, True
     ),
@@ -2097,13 +2139,8 @@ def test_DictView_pickle(testcase, dictview):
     Test function for pickling and unpickling DictView objects
     """
 
-    # Don't change the testcase data, but a copy
-    dictview_copy = DictView(dictview)
-
     # Pickle the object
-    pkl = pickle.dumps(dictview_copy)
-
-    del dictview_copy
+    pkl = pickle.dumps(dictview)
 
     # Unpickle the object
     dictview2 = pickle.loads(pkl)

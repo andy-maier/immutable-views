@@ -62,8 +62,8 @@ Creating an immutable view on a collection does not copy the collection and
 is therefore much faster than creating an immutable copy of the collection.
 
 The memory overhead of using immutable views is very small: An object
-of any of the view classes in the **immutable-views** package occupies 48 Bytes
-(measured in CPython 3.8 on macOS), and because the view object only has a
+of any of the view classes in the **immutable-views** package occupies 40 Bytes
+(measured in CPython 3.9 on macOS), and because the view object only has a
 reference to its underlying collection object, that size is independent of the
 number of items in the collection.
 

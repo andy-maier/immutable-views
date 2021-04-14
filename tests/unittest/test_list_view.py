@@ -45,6 +45,34 @@ LIST_HAS_CLEAR = sys.version_info[0] == 3
 DICT_PRESERVES_ORDER = sys.version_info[0:2] >= (3, 7)
 
 
+class DerivedList(list):
+    """List derived from list with additional attribute"""
+
+    def __init__(self, *args, **kwargs):
+        super(DerivedList, self).__init__(*args, **kwargs)
+        self._dummy = 'dummy'
+
+    def __eq__(self, other):
+        super_equal = super(DerivedList, self).__eq__(other)
+        if isinstance(other, DerivedList):
+            return super_equal and self._dummy == other._dummy
+        return super_equal
+
+
+class DerivedListView(ListView):
+    """List view derived from ListView with additional attribute"""
+
+    def __init__(self, *args, **kwargs):
+        super(DerivedListView, self).__init__(*args, **kwargs)
+        self._dummy = 'dummy'
+
+    def __eq__(self, other):
+        super_equal = super(DerivedListView, self).__eq__(other)
+        if isinstance(other, DerivedListView):
+            return super_equal and self._dummy == other._dummy
+        return super_equal
+
+
 def assert_equal(list1, list2, verify_order=True):
     """
     Assert that list1 is equal to list2.
@@ -2010,16 +2038,30 @@ TESTCASES_LISTVIEW_PICKLE = [
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
     (
-        "Empty list",
+        "ListView of empty list",
         dict(
             listview=ListView([]),
         ),
         None, None, True
     ),
     (
-        "List with two items",
+        "ListView of list with two items",
         dict(
-            listview=ListView(['Dog', 'cat']),
+            listview=ListView(['Dog', 'Cat']),
+        ),
+        None, None, True
+    ),
+    (
+        "ListView of DerivedList with two items",
+        dict(
+            listview=ListView(DerivedList(['Dog', 'Cat'])),
+        ),
+        None, None, True
+    ),
+    (
+        "DerivedListView of list with two items",
+        dict(
+            listview=DerivedListView(['Dog', 'Cat']),
         ),
         None, None, True
     ),
@@ -2035,13 +2077,8 @@ def test_ListView_pickle(testcase, listview):
     Test function for pickling and unpickling ListView objects
     """
 
-    # Don't change the testcase data, but a copy
-    listview_copy = ListView(listview)
-
     # Pickle the object
-    pkl = pickle.dumps(listview_copy)
-
-    del listview_copy
+    pkl = pickle.dumps(listview)
 
     # Unpickle the object
     listview2 = pickle.loads(pkl)
