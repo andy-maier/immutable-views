@@ -16,14 +16,10 @@ Change log
 ==========
 
 
-Version 0.6.0.dev1
-------------------
+Version 0.6.0
+-------------
 
-Released: not yet
-
-**Incompatible changes:**
-
-**Deprecations:**
+Released: 2021-04-14
 
 **Bug fixes:**
 
@@ -58,12 +54,6 @@ Released: not yet
 
 * Docs: Removed INSTALL.md file to avoid duplicate information that can become
   inconsistent.
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/andy-maier/immutable-views/issues
 
 
 Version 0.5.0
