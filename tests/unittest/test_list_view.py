@@ -227,15 +227,14 @@ def test_ListView_init(testcase, init_args, init_kwargs):
     assert testcase.exp_exc_types is None
 
     a_list_arg = get_a_list_arg(*init_args, **init_kwargs)
-    listview_list = listview._list  # pylint: disable=protected-access
+    listview_list = listview.list
 
     # Verify that ListView inherits from Sequence
     assert isinstance(listview, Sequence)
 
     # Verify the underlying list object's identity
     if isinstance(a_list_arg, ListView):
-        # pylint: disable=protected-access
-        assert listview_list is a_list_arg._list
+        assert listview_list is a_list_arg.list
     else:
         assert listview_list is a_list_arg
 
@@ -1779,12 +1778,12 @@ def test_ListView_copy(testcase, listview):
     Test function for ListView.copy()
     """
 
-    listview_list = listview._list  # pylint: disable=protected-access
+    listview_list = listview.list
 
     # The code to be tested
     listview_copy = listview.copy()
 
-    listview_copy_list = listview_copy._list  # pylint: disable=protected-access
+    listview_copy_list = listview_copy.list
 
     # Ensure that exceptions raised in the remainder of this function
     # are not mistaken as expected exceptions

@@ -46,6 +46,8 @@ Released: not yet
 
 * Added tests for pickling DictView. (issue #47)
 
+* Added access to the underlying objects via a property.
+
 **Cleanup:**
 
 * Docs: Simplified the introduction section.

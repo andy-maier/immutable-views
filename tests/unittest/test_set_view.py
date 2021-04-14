@@ -200,14 +200,14 @@ def test_SetView_init(testcase, init_args, init_kwargs):
     assert testcase.exp_exc_types is None
 
     a_set_arg = get_a_set_arg(*init_args, **init_kwargs)
-    setview_set = setview._set  # pylint: disable=protected-access
+    setview_set = setview.set
 
     # Verify that SetView inherits from Set
     assert isinstance(setview, Set)
 
     # Verify the underlying set object's identity
     if isinstance(a_set_arg, SetView):
-        assert setview_set is a_set_arg._set  # pylint: disable=protected-access
+        assert setview_set is a_set_arg.set
     else:
         assert setview_set is a_set_arg
 
@@ -3331,12 +3331,12 @@ def test_SetView_copy(testcase, setview):
     Test function for SetView.copy()
     """
 
-    setview_set = setview._set  # pylint: disable=protected-access
+    setview_set = setview.set
 
     # The code to be tested
     setview_copy = setview.copy()
 
-    setview_copy_set = setview_copy._set  # pylint: disable=protected-access
+    setview_copy_set = setview_copy.set
 
     # Ensure that exceptions raised in the remainder of this function
     # are not mistaken as expected exceptions
