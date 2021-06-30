@@ -16,29 +16,15 @@ Change log
 ==========
 
 
-Version 0.6.1.dev1
-------------------
+Version 0.6.1
+-------------
 
-Released: not yet
-
-**Incompatible changes:**
-
-**Deprecations:**
+Released: 2021-06-30
 
 **Bug fixes:**
 
 * Fixed new Pylint issue 'deprecated-class' that is raised when importing from
   collections in Python versions that do not support collections.abc yet.
-
-**Enhancements:**
-
-**Cleanup:**
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/andy-maier/immutable-views/issues
 
 
 Version 0.6.0
