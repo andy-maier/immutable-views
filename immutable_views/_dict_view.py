@@ -22,7 +22,7 @@ try:
     from collections.abc import Mapping
 except ImportError:
     # Python 2
-    from collections import Mapping
+    from collections import Mapping  # pylint: disable=deprecated-class
 
 __all__ = ['DictView']
 

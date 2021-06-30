@@ -20,7 +20,7 @@ try:
     from collections.abc import Set
 except ImportError:
     # Python 2
-    from collections import Set
+    from collections import Set  # pylint: disable=deprecated-class
 
 __all__ = ['SetView']
 
