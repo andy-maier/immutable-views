@@ -24,6 +24,7 @@ try:
     from collections.abc import KeysView, ValuesView, ItemsView, Iterator, \
         MutableMapping, Mapping
 except ImportError:
+    # pylint: disable=deprecated-class
     from collections import KeysView, ValuesView, ItemsView, Iterator, \
         MutableMapping, Mapping
 import pytest

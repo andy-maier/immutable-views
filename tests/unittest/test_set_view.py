@@ -23,6 +23,7 @@ try:
     from collections.abc import Set, MutableSet
 except ImportError:
     # Python 2
+    # pylint: disable=deprecated-class
     from collections import Set, MutableSet
 import pytest
 

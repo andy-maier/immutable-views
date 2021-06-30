@@ -23,6 +23,7 @@ try:
     from collections.abc import Sequence, MutableSequence
 except ImportError:
     # Python 2
+    # pylint: disable=deprecated-class
     from collections import Sequence, MutableSequence
 import pytest
 from nocaselist import NocaseList

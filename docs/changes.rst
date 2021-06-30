@@ -27,6 +27,9 @@ Released: not yet
 
 **Bug fixes:**
 
+* Fixed new Pylint issue 'deprecated-class' that is raised when importing from
+  collections in Python versions that do not support collections.abc yet.
+
 **Enhancements:**
 
 **Cleanup:**
